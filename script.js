@@ -14,6 +14,13 @@ const stageTitle = document.querySelector("#stage-title");
 const stageCategory = document.querySelector("#stage-category");
 const stageStatus = document.querySelector("#stage-status");
 const stageOpen = document.querySelector("[data-open-project]");
+const inquiryForm = document.querySelector("#inquiry-form");
+const formStatus = document.querySelector("#form-status");
+const inquiryProject = document.querySelector("#inquiry-project");
+const inquiryContext = document.querySelector("#inquiry-context");
+const dialogInquiry = document.querySelector("[data-inquiry-project]");
+const formEndpoint = (import.meta.env.VITE_FORM_ENDPOINT || "").trim();
+const formStartedAt = Date.now();
 const lastProjectFocus = { element: null };
 let activeProjectId = "aethera";
 let closingFromHistory = false;
@@ -128,10 +135,105 @@ function detailFields(project) {
   document.querySelector("#detail-repo").href = project.repo;
   document.querySelector("#detail-art").className = `dialog-art ${project.previewClass}`;
   document.querySelector("#detail-art").innerHTML = project.preview;
+  dialogInquiry.dataset.inquiryProject = activeProjectId;
 
   const liveLink = document.querySelector("#detail-live");
   liveLink.hidden = !project.live;
   if (project.live) liveLink.href = project.live;
+}
+
+function setInquiryContext(id = "") {
+  inquiryProject.value = id;
+  if (id && projects[id]) {
+    inquiryContext.textContent = `Context added: ${projects[id].name}. You can change the project type or describe something different.`;
+    return;
+  }
+  inquiryContext.textContent = "No commitment, no fixed package — just a clear starting point.";
+}
+
+function setFormStatus(message, tone = "neutral") {
+  formStatus.textContent = message;
+  formStatus.dataset.tone = tone;
+}
+
+function validateInquiryForm() {
+  const fields = [...inquiryForm.querySelectorAll("input, select, textarea")].filter((field) => field.name !== "website");
+  let valid = true;
+
+  fields.forEach((field) => {
+    field.removeAttribute("aria-invalid");
+    const wrapper = field.closest(".form-field");
+    wrapper?.querySelector(".field-error")?.remove();
+    let message = "";
+
+    if (field.required && !field.value.trim()) message = "Please add this detail.";
+    if (field.type === "email" && field.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value)) message = "Please use a valid email address.";
+    if (field.type === "url" && field.value && !/^https?:\/\//i.test(field.value)) message = "Please include https:// or http://.";
+
+    if (!message) return;
+    valid = false;
+    field.setAttribute("aria-invalid", "true");
+    if (wrapper) {
+      const error = document.createElement("small");
+      error.className = "field-error";
+      error.textContent = message;
+      wrapper.append(error);
+    }
+  });
+
+  return valid;
+}
+
+async function submitInquiry(event) {
+  event.preventDefault();
+  setFormStatus("", "neutral");
+
+  if (!validateInquiryForm()) {
+    setFormStatus("Please check the highlighted fields and try again.", "error");
+    inquiryForm.querySelector('[aria-invalid="true"]')?.focus();
+    return;
+  }
+
+  const honeypot = inquiryForm.elements.website;
+  if (honeypot.value || Date.now() - formStartedAt < 800) {
+    setFormStatus("We could not send that message. Please try again.", "error");
+    return;
+  }
+
+  if (!formEndpoint) {
+    setFormStatus("The inquiry form is ready, but delivery is not configured yet. Add VITE_FORM_ENDPOINT or use GitHub as the verified fallback.", "error");
+    return;
+  }
+
+  const submitButton = inquiryForm.querySelector("button[type=submit]");
+  const submitLabel = submitButton.querySelector(".submit-label");
+  submitButton.disabled = true;
+  submitLabel.textContent = "Sending…";
+  setFormStatus("Sending your inquiry…", "loading");
+
+  const payload = Object.fromEntries(new FormData(inquiryForm).entries());
+  delete payload.website;
+  payload._subject = `Portfolio inquiry from ${payload.name}`;
+
+  try {
+    const response = await fetch(formEndpoint, {
+      method: "POST",
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) throw new Error(`Submission failed with ${response.status}`);
+    const projectContext = inquiryProject.value;
+    inquiryForm.reset();
+    setInquiryContext(projectContext);
+    setFormStatus("Thanks — your inquiry was sent. I’ll review the brief and follow up through the submitted email address.", "success");
+  } catch (error) {
+    console.error(error);
+    setFormStatus("The message could not be sent right now. Please use GitHub as the fallback contact route.", "error");
+  } finally {
+    submitButton.disabled = false;
+    submitLabel.textContent = "Send project inquiry";
+  }
 }
 
 function projectIdFromLocation() {
@@ -220,6 +322,24 @@ stageOpen.addEventListener("click", () => openProject(stageOpen.dataset.openProj
 document.querySelector("[data-project-prev]").addEventListener("click", () => cycleProject(-1));
 document.querySelector("[data-project-next]").addEventListener("click", () => cycleProject(1));
 document.querySelector(".dialog-close").addEventListener("click", closeProject);
+dialogInquiry.addEventListener("click", () => {
+  const projectId = dialogInquiry.dataset.inquiryProject || activeProjectId;
+  setInquiryContext(projectId);
+  closeProject();
+  window.setTimeout(() => {
+    document.querySelector("#contact").scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
+    inquiryForm.elements.name.focus();
+  }, reducedMotion ? 0 : 160);
+});
+
+inquiryForm.addEventListener("submit", submitInquiry);
+inquiryForm.querySelectorAll("input, select, textarea").forEach((field) => {
+  field.addEventListener("input", () => {
+    field.removeAttribute("aria-invalid");
+    field.closest(".form-field")?.querySelector(".field-error")?.remove();
+    if (formStatus.dataset.tone === "error") setFormStatus("", "neutral");
+  });
+});
 
 dialog.addEventListener("click", (event) => {
   if (event.target === dialog) closeProject();
@@ -235,6 +355,7 @@ dialog.addEventListener("close", () => {
 window.addEventListener("popstate", syncProjectFromLocation);
 window.addEventListener("hashchange", syncProjectFromLocation);
 syncProjectFromLocation();
+setInquiryContext("");
 
 const revealItems = document.querySelectorAll(".reveal");
 if ("IntersectionObserver" in window && !reducedMotion) {
