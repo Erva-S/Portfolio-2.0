@@ -1,3 +1,5 @@
+import { Forminit } from "forminit";
+
 const doc = document.documentElement;
 doc.classList.add("js");
 
@@ -19,7 +21,23 @@ const formStatus = document.querySelector("#form-status");
 const inquiryProject = document.querySelector("#inquiry-project");
 const inquiryContext = document.querySelector("#inquiry-context");
 const dialogInquiry = document.querySelector("[data-inquiry-project]");
-const formEndpoint = (import.meta.env.VITE_FORM_ENDPOINT || "").trim();
+
+// Forminit form: inputs are named fi-{type}-{name}. Rules: https://forminit.com/setup.md
+const FORMINIT_FORM_ID = "jn7g4p33910";
+const FIELD_ERRORS = {
+  "sender.fullName": "Please use only letters, spaces, hyphens, apostrophes and periods.",
+  "sender.email": "Please enter a valid email address.",
+};
+
+function errorText(error) {
+  const field = error?.fieldName ?? /['"]([^'"]+)['"]/.exec(error?.message ?? "")?.[1];
+  if (field && FIELD_ERRORS[field]) return FIELD_ERRORS[field];
+  if (error?.error === "TOO_MANY_REQUESTS") return "Please wait a few seconds and try again.";
+  return "Something went wrong. Please try again.";
+}
+
+let forminitInstance;
+let isSendingForm = false;
 const formStartedAt = Date.now();
 const lastProjectFocus = { element: null };
 let activeProjectId = "aethera";
@@ -152,7 +170,7 @@ function setFormStatus(message, tone = "neutral") {
 }
 
 function validateInquiryForm() {
-  const fields = [...inquiryForm.querySelectorAll("input, textarea")].filter((field) => field.name !== "website");
+  const fields = [...inquiryForm.querySelectorAll("input, textarea")].filter((field) => field.name !== "_gotcha");
   let valid = true;
 
   fields.forEach((field) => {
@@ -180,6 +198,7 @@ function validateInquiryForm() {
 
 async function submitInquiry(event) {
   event.preventDefault();
+  if (isSendingForm) return;
   setFormStatus("", "neutral");
 
   if (!validateInquiryForm()) {
@@ -188,41 +207,43 @@ async function submitInquiry(event) {
     return;
   }
 
-  const honeypot = inquiryForm.elements.website;
-  if (honeypot && (honeypot.value || Date.now() - formStartedAt < 800)) {
+  const fd = new FormData(inquiryForm);
+
+  if (fd.get("_gotcha") || Date.now() - formStartedAt < 800) {
     setFormStatus("We could not send that message. Please try again.", "error");
     return;
   }
 
-  if (!formEndpoint) {
-    setFormStatus("The contact form is ready, but delivery is not configured yet. Add VITE_FORM_ENDPOINT (e.g. Formspree) in .env, or connect on GitHub.", "error");
-    return;
+  // Straighten curly apostrophes in sender names
+  for (const k of ["fi-sender-fullName", "fi-sender-firstName", "fi-sender-lastName"]) {
+    const v = fd.get(k);
+    if (typeof v === "string") fd.set(k, v.replace(/[\u2018\u2019]/g, "'"));
   }
 
   const submitButton = inquiryForm.querySelector("button[type=submit]");
   const submitLabel = submitButton.querySelector(".submit-label");
+  isSendingForm = true;
   submitButton.disabled = true;
   submitLabel.textContent = "Sending…";
   setFormStatus("Sending your message…", "loading");
 
-  const payload = Object.fromEntries(new FormData(inquiryForm).entries());
-  delete payload.website;
-  payload._subject = `Portfolio message from ${payload.name}`;
-
   try {
-    const response = await fetch(formEndpoint, {
-      method: "POST",
-      headers: { Accept: "application/json", "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+    if (!forminitInstance) forminitInstance = new Forminit();
+    const { data, error } = await forminitInstance.submit(FORMINIT_FORM_ID, fd);
 
-    if (!response.ok) throw new Error(`Submission failed with ${response.status}`);
+    if (error || typeof data?.hashId !== "string") {
+      console.error("Forminit error:", error ?? data);
+      setFormStatus(errorText(error), "error");
+      return;
+    }
+
     inquiryForm.reset();
     setFormStatus("Thank you! Your message has been sent. I'll get back to you soon.", "success");
-  } catch (error) {
-    console.error(error);
-    setFormStatus("The message could not be sent right now. Please connect on GitHub instead.", "error");
+  } catch (err) {
+    console.error("Forminit error:", err);
+    setFormStatus("Something went wrong. Please try again.", "error");
   } finally {
+    isSendingForm = false;
     submitButton.disabled = false;
     submitLabel.textContent = "Send a message";
   }
@@ -320,7 +341,7 @@ dialogInquiry.addEventListener("click", () => {
   closeProject();
   window.setTimeout(() => {
     document.querySelector("#contact").scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
-    inquiryForm.elements.name.focus();
+    (inquiryForm.elements["fi-sender-fullName"] || inquiryForm.elements.name)?.focus();
   }, reducedMotion ? 0 : 160);
 });
 

@@ -162,23 +162,23 @@
         </div>
 
         <div class="contact-card reveal reveal--stage">
-          <form id="inquiry-form" class="simple-contact-form" novalidate>
+          <form id="inquiry-form" class="simple-contact-form" action="https://forminit.com/f/jn7g4p33910" method="POST" enctype="multipart/form-data" novalidate>
             <div class="form-grid form-grid--two">
               <label class="form-field">
                 <span>Name <b>*</b></span>
-                <input type="text" name="name" autocomplete="name" required placeholder="Your name" />
+                <input type="text" name="fi-sender-fullName" autocomplete="name" required placeholder="Your name" />
               </label>
               <label class="form-field">
                 <span>Email <b>*</b></span>
-                <input type="email" name="email" autocomplete="email" required placeholder="you@example.com" />
+                <input type="email" name="fi-sender-email" autocomplete="email" required placeholder="you@example.com" />
               </label>
             </div>
             <label class="form-field form-field--message">
               <span>Message <b>*</b></span>
-              <textarea name="message" rows="5" required placeholder="Tell me a bit about what you're thinking or looking to build..."></textarea>
+              <textarea name="fi-text-message" rows="5" required placeholder="Tell me a bit about what you're thinking or looking to build..."></textarea>
             </label>
-            <input type="hidden" name="project_reference" id="inquiry-project" />
-            <label class="honeypot" aria-hidden="true">Leave this field empty<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+            <input type="hidden" name="fi-text-project_reference" id="inquiry-project" />
+            <label class="honeypot" aria-hidden="true">Leave this field empty<input type="text" name="_gotcha" tabindex="-1" autocomplete="off" /></label>
             <div class="form-submit-row">
               <button class="button button--light" type="submit">
                 <span class="submit-label">Send a message</span>
