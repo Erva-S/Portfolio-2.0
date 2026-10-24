@@ -33,8 +33,8 @@ npm run preview
 ## Structure
 
 - `index.html` — page structure, content, metadata, and verified project links.
-- `styles.css` — design tokens, responsive layouts, visual project studies, and motion styles.
-- `script.js` — navigation, scroll progress, reveal choreography, active-section feedback, and reduced-motion handling.
+- `styles.css` — design tokens, responsive layouts, typographic project index, detail dialog, visual studies, and motion styles.
+- `script.js` — navigation, project preview selection, URL/hash history, accessible project detail views, scroll progress, reveal choreography, and reduced-motion handling.
 - `favicon.svg` — minimal ES monogram favicon.
 
 ## Content notes
@@ -46,7 +46,9 @@ The project links currently point to public GitHub repositories under `Erva-S`:
 - `CyberKavach_task_Erva`
 - `Cpp_Project` / Smart Study Planner
 
-The portfolio intentionally uses CSS-built interface studies instead of stock imagery or invented product screenshots. Replace the portrait placeholder in the About section with a real image when ready.
+The project index uses CSS-built visual studies because the current portfolio directory does not contain authenticated project screenshots or image assets. These previews are intentionally presented as visual studies, not as screenshots of the applications. Replace or supplement them with real project captures when they are available.
+
+Selecting a project updates the preview. Clicking or pressing Enter opens an accessible project detail dialog with a URL hash such as `#project/dns`, so browser back/forward navigation works. On mobile, the same list works through tap selection.
 
 ## Before publishing
 
