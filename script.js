@@ -143,12 +143,7 @@ function detailFields(project) {
 }
 
 function setInquiryContext(id = "") {
-  inquiryProject.value = id;
-  if (id && projects[id]) {
-    inquiryContext.textContent = `Context added: ${projects[id].name}. You can change the project type or describe something different.`;
-    return;
-  }
-  inquiryContext.textContent = "No commitment, no fixed package — just a clear starting point.";
+  if (inquiryProject) inquiryProject.value = id;
 }
 
 function setFormStatus(message, tone = "neutral") {
@@ -157,7 +152,7 @@ function setFormStatus(message, tone = "neutral") {
 }
 
 function validateInquiryForm() {
-  const fields = [...inquiryForm.querySelectorAll("input, select, textarea")].filter((field) => field.name !== "website");
+  const fields = [...inquiryForm.querySelectorAll("input, textarea")].filter((field) => field.name !== "website");
   let valid = true;
 
   fields.forEach((field) => {
@@ -166,9 +161,8 @@ function validateInquiryForm() {
     wrapper?.querySelector(".field-error")?.remove();
     let message = "";
 
-    if (field.required && !field.value.trim()) message = "Please add this detail.";
+    if (field.required && !field.value.trim()) message = "Please fill in this field.";
     if (field.type === "email" && field.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value)) message = "Please use a valid email address.";
-    if (field.type === "url" && field.value && !/^https?:\/\//i.test(field.value)) message = "Please include https:// or http://.";
 
     if (!message) return;
     valid = false;
@@ -189,19 +183,19 @@ async function submitInquiry(event) {
   setFormStatus("", "neutral");
 
   if (!validateInquiryForm()) {
-    setFormStatus("Please check the highlighted fields and try again.", "error");
+    setFormStatus("Please fill in your name, email, and message.", "error");
     inquiryForm.querySelector('[aria-invalid="true"]')?.focus();
     return;
   }
 
   const honeypot = inquiryForm.elements.website;
-  if (honeypot.value || Date.now() - formStartedAt < 800) {
+  if (honeypot && (honeypot.value || Date.now() - formStartedAt < 800)) {
     setFormStatus("We could not send that message. Please try again.", "error");
     return;
   }
 
   if (!formEndpoint) {
-    setFormStatus("The inquiry form is ready, but delivery is not configured yet. Add VITE_FORM_ENDPOINT or use GitHub as the verified fallback.", "error");
+    setFormStatus("The contact form is ready, but delivery is not configured yet. Add VITE_FORM_ENDPOINT (e.g. Formspree) in .env, or connect on GitHub.", "error");
     return;
   }
 
@@ -209,11 +203,11 @@ async function submitInquiry(event) {
   const submitLabel = submitButton.querySelector(".submit-label");
   submitButton.disabled = true;
   submitLabel.textContent = "Sending…";
-  setFormStatus("Sending your inquiry…", "loading");
+  setFormStatus("Sending your message…", "loading");
 
   const payload = Object.fromEntries(new FormData(inquiryForm).entries());
   delete payload.website;
-  payload._subject = `Portfolio inquiry from ${payload.name}`;
+  payload._subject = `Portfolio message from ${payload.name}`;
 
   try {
     const response = await fetch(formEndpoint, {
@@ -223,16 +217,14 @@ async function submitInquiry(event) {
     });
 
     if (!response.ok) throw new Error(`Submission failed with ${response.status}`);
-    const projectContext = inquiryProject.value;
     inquiryForm.reset();
-    setInquiryContext(projectContext);
-    setFormStatus("Thanks — your inquiry was sent. I’ll review the brief and follow up through the submitted email address.", "success");
+    setFormStatus("Thank you! Your message has been sent. I'll get back to you soon.", "success");
   } catch (error) {
     console.error(error);
-    setFormStatus("The message could not be sent right now. Please use GitHub as the fallback contact route.", "error");
+    setFormStatus("The message could not be sent right now. Please connect on GitHub instead.", "error");
   } finally {
     submitButton.disabled = false;
-    submitLabel.textContent = "Send project inquiry";
+    submitLabel.textContent = "Send a message";
   }
 }
 
