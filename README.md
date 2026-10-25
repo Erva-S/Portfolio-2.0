@@ -80,18 +80,11 @@ Selecting a project updates the preview. Clicking or pressing Enter opens an acc
 
 ## Inquiry form setup
 
-The form validates fields in the browser and includes a hidden honeypot field. It does **not** pretend to send a message when no delivery service is configured. Without `VITE_FORM_ENDPOINT`, it shows an actionable setup message and keeps GitHub as the verified fallback contact route.
+The inquiry form validates fields in the browser and uses [Forminit](https://forminit.com) for backend submission handling (configured directly with `FORMINIT_FORM_ID` in `script.js`).
 
-To enable real delivery:
-
-1. Create a form endpoint with a provider that accepts browser `POST` requests, such as Formspree or another compatible service.
-2. Copy `.env.example` to `.env`.
-3. Set `VITE_FORM_ENDPOINT` to the provider's public form endpoint. Do not put private API keys in this file or in client-side code.
-4. Restart `npm run dev` after changing `.env`.
-5. Add the same `VITE_FORM_ENDPOINT` environment variable in the deployment provider's project settings.
-6. Submit a test inquiry and confirm delivery in the provider dashboard and destination inbox before publishing the form link.
-
-The current repository has no backend or existing email integration, and no provider endpoint was available to verify in this environment. Therefore, end-to-end delivery is intentionally left unclaimed until the endpoint is configured.
+- Form submissions are sent directly via Forminit's client SDK.
+- Honeypot anti-spam protection is included.
+- No `.env` file or environment variables are required for standard delivery.
 
 ## Accessibility and motion
 
