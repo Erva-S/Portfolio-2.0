@@ -4,7 +4,7 @@
   --paper-deep: #f5f1e8;
   --ink: #2a2219;
   --ink-soft: #62584d;
-  --muted: #8c8279;
+  --muted: #6e6459;
   --line: rgba(42, 34, 25, 0.16);
   --line-light: rgba(250, 248, 243, 0.18);
   --gold: #d4a574;
@@ -339,7 +339,35 @@ button { color: inherit; }
 .hero-line--two > span { transition-delay: 210ms; }
 .hero-line--three > span { transition-delay: 320ms; }
 .is-ready .hero-line > span { transform: translateY(0); transition: transform 1050ms var(--ease-out); }
-.hero-title em, .display-title em, .section-title em, .contact-title em { color: var(--gold); font-weight: 400; }
+.hero-title em {
+  position: relative;
+  display: inline-block;
+  color: var(--gold);
+  font-weight: 400;
+  transition: color 260ms ease;
+}
+
+.hero-title em::after {
+  position: absolute;
+  right: 0;
+  bottom: 0.06em;
+  left: 0;
+  height: 2px;
+  background: currentColor;
+  content: "";
+  opacity: 0.7;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 380ms var(--ease-out);
+}
+
+.hero-title:hover em::after,
+.hero-title em:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.display-title em, .section-title em, .contact-title em { color: var(--gold); font-weight: 400; }
 .hero-dot { color: var(--gold); }
 
 .hero-support { max-width: 390px; padding-bottom: 6px; }
