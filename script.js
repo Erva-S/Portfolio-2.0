@@ -407,7 +407,7 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
 
 requestAnimationFrame(() => document.body.classList.add("is-ready"));
 
-/* --- React Bits Pro: Luminous Type Engine --- */
+/* --- React Bits Pro: Luminous Type Engine (Hover Only) --- */
 function initLuminousType() {
   const elements = document.querySelectorAll(".luminous-type");
   if (!elements.length) return;
@@ -418,52 +418,82 @@ function initLuminousType() {
     let currentX = 50;
     let currentY = 50;
     let isHovered = false;
-    const startTime = performance.now();
+    let animId = null;
+    let hoverStartTime = 0;
+    let leaveTimer = null;
 
     const parent = el.closest(".wordmark") || el;
 
-    function onPointerMove(e) {
-      const rect = el.getBoundingClientRect();
-      if (!rect.width || !rect.height) return;
-      const px = ((e.clientX - rect.left) / rect.width) * 100;
-      const py = ((e.clientY - rect.top) / rect.height) * 100;
-      targetX = Math.max(-15, Math.min(115, px));
-      targetY = Math.max(-20, Math.min(120, py));
-      isHovered = true;
-    }
-
-    function onPointerLeave() {
-      isHovered = false;
-    }
-
-    parent.addEventListener("pointermove", onPointerMove, { passive: true });
-    parent.addEventListener("pointerleave", onPointerLeave, { passive: true });
-
-    if (reducedMotion) {
-      el.style.setProperty("--spot-x", "50%");
-      el.style.setProperty("--spot-y", "50%");
-      return;
-    }
-
     function render(now) {
       if (!isHovered) {
-        // Continuous organic drifting spotlight across the text
-        const elapsed = (now - startTime) / 1000;
-        targetX = 50 + Math.sin(elapsed * 1.35) * 58;
-        targetY = 50 + Math.cos(elapsed * 2.1) * 22;
+        currentX += (targetX - currentX) * 0.1;
+        currentY += (targetY - currentY) * 0.1;
+      } else {
+        const elapsed = (now - hoverStartTime) / 1000;
+        const driftOffset = Math.sin(elapsed * 2.2) * 8;
+        const boundedX = Math.max(-10, Math.min(110, targetX + driftOffset));
+        currentX += (boundedX - currentX) * 0.12;
+        currentY += (targetY - currentY) * 0.12;
       }
-
-      // Smooth interpolation (lerp) toward target spotlight position
-      currentX += (targetX - currentX) * 0.085;
-      currentY += (targetY - currentY) * 0.085;
 
       el.style.setProperty("--spot-x", `${currentX.toFixed(2)}%`);
       el.style.setProperty("--spot-y", `${currentY.toFixed(2)}%`);
 
-      requestAnimationFrame(render);
+      if (isHovered || Math.abs(targetX - currentX) > 0.4) {
+        animId = requestAnimationFrame(render);
+      } else {
+        animId = null;
+      }
     }
 
-    requestAnimationFrame(render);
+    function startLoop() {
+      if (!animId && !reducedMotion) {
+        animId = requestAnimationFrame(render);
+      }
+    }
+
+    function onPointerEnter(e) {
+      if (leaveTimer) clearTimeout(leaveTimer);
+      isHovered = true;
+      hoverStartTime = performance.now();
+      parent.classList.add("is-luminous-active");
+
+      const rect = el.getBoundingClientRect();
+      if (rect.width && rect.height) {
+        targetX = Math.max(-10, Math.min(110, ((e.clientX - rect.left) / rect.width) * 100));
+        targetY = Math.max(-20, Math.min(120, ((e.clientY - rect.top) / rect.height) * 100));
+        currentX = targetX;
+        currentY = targetY;
+        el.style.setProperty("--spot-x", `${currentX.toFixed(2)}%`);
+        el.style.setProperty("--spot-y", `${currentY.toFixed(2)}%`);
+      }
+      startLoop();
+    }
+
+    function onPointerMove(e) {
+      const rect = el.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      targetX = Math.max(-10, Math.min(110, ((e.clientX - rect.left) / rect.width) * 100));
+      targetY = Math.max(-20, Math.min(120, ((e.clientY - rect.top) / rect.height) * 100));
+      if (!isHovered) {
+        onPointerEnter(e);
+      }
+    }
+
+    function onPointerLeave() {
+      isHovered = false;
+      parent.classList.remove("is-luminous-active");
+      leaveTimer = setTimeout(() => {
+        if (!isHovered && animId) {
+          cancelAnimationFrame(animId);
+          animId = null;
+        }
+      }, 350);
+    }
+
+    parent.addEventListener("pointerenter", onPointerEnter, { passive: true });
+    parent.addEventListener("pointermove", onPointerMove, { passive: true });
+    parent.addEventListener("pointerleave", onPointerLeave, { passive: true });
   });
 }
 
