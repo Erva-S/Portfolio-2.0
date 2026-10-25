@@ -406,3 +406,65 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
 });
 
 requestAnimationFrame(() => document.body.classList.add("is-ready"));
+
+/* --- React Bits Pro: Luminous Type Engine --- */
+function initLuminousType() {
+  const elements = document.querySelectorAll(".luminous-type");
+  if (!elements.length) return;
+
+  elements.forEach((el) => {
+    let targetX = 50;
+    let targetY = 50;
+    let currentX = 50;
+    let currentY = 50;
+    let isHovered = false;
+    const startTime = performance.now();
+
+    const parent = el.closest(".wordmark") || el;
+
+    function onPointerMove(e) {
+      const rect = el.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const px = ((e.clientX - rect.left) / rect.width) * 100;
+      const py = ((e.clientY - rect.top) / rect.height) * 100;
+      targetX = Math.max(-15, Math.min(115, px));
+      targetY = Math.max(-20, Math.min(120, py));
+      isHovered = true;
+    }
+
+    function onPointerLeave() {
+      isHovered = false;
+    }
+
+    parent.addEventListener("pointermove", onPointerMove, { passive: true });
+    parent.addEventListener("pointerleave", onPointerLeave, { passive: true });
+
+    if (reducedMotion) {
+      el.style.setProperty("--spot-x", "50%");
+      el.style.setProperty("--spot-y", "50%");
+      return;
+    }
+
+    function render(now) {
+      if (!isHovered) {
+        // Continuous organic drifting spotlight across the text
+        const elapsed = (now - startTime) / 1000;
+        targetX = 50 + Math.sin(elapsed * 1.35) * 58;
+        targetY = 50 + Math.cos(elapsed * 2.1) * 22;
+      }
+
+      // Smooth interpolation (lerp) toward target spotlight position
+      currentX += (targetX - currentX) * 0.085;
+      currentY += (targetY - currentY) * 0.085;
+
+      el.style.setProperty("--spot-x", `${currentX.toFixed(2)}%`);
+      el.style.setProperty("--spot-y", `${currentY.toFixed(2)}%`);
+
+      requestAnimationFrame(render);
+    }
+
+    requestAnimationFrame(render);
+  });
+}
+
+initLuminousType();
