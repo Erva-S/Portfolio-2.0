@@ -189,8 +189,13 @@ button { color: inherit; }
 .button--dark:hover { background: var(--gold); color: var(--ink); }
 .button--light { background: var(--paper); color: var(--ink); }
 .button--light:hover { border-color: var(--gold); background: var(--gold); }
+.button--outline { border: 1px solid var(--line-light); background: transparent; color: var(--paper); }
+.button--outline:hover { border-color: var(--gold); color: var(--gold); }
 .button-arrow { display: grid; width: 27px; height: 27px; place-items: center; border: 1px solid currentColor; border-radius: 50%; font-size: 14px; transition: transform 240ms var(--ease-out); }
 .button:hover .button-arrow { transform: rotate(-45deg); }
+.button-content { display: inline-flex; align-items: center; gap: 10px; min-width: 0; }
+.button-icon { width: 15px; height: 15px; flex: 0 0 15px; transition: transform 240ms var(--ease-out); }
+.button:hover .button-icon { transform: scale(1.1); }
 .text-link { display: inline-flex; align-items: center; gap: 8px; padding-bottom: 5px; border-bottom: 1px solid var(--line); color: var(--ink-soft); font-size: 11px; font-weight: 700; transition: color 200ms ease, border-color 200ms ease; }
 .text-link:hover { border-color: var(--gold); color: var(--ink); }
 .text-link.is-muted { color: rgba(42, 34, 25, 0.6); }
@@ -350,8 +355,10 @@ button { color: inherit; }
 .contact-layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.5fr); gap: 80px; align-items: end; max-width: 960px; margin: 68px auto 0; }
 .contact-title { font-size: clamp(3.8rem, 8vw, 7.5rem); line-height: 0.88; letter-spacing: -0.05em; }
 .contact-copy { max-width: 520px; margin: 28px 0 0; color: rgba(250, 248, 243, 0.65); font-size: 14px; line-height: 1.7; }
-.contact-actions { display: flex; align-items: flex-start; flex-direction: column; gap: 24px; padding-bottom: 8px; }
-.contact-actions p { display: flex; align-items: flex-start; gap: 10px; max-width: 260px; margin: 0; color: rgba(250, 248, 243, 0.46); font-size: 9px; letter-spacing: 0.03em; line-height: 1.6; }
+.contact-actions { display: flex; align-items: flex-start; flex-direction: column; gap: 20px; padding-bottom: 8px; width: 100%; max-width: 320px; }
+.contact-buttons-group { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+.contact-buttons-group .button { width: 100%; min-width: 0; }
+.contact-actions p { display: flex; align-items: flex-start; gap: 10px; max-width: 300px; margin: 0; color: rgba(250, 248, 243, 0.46); font-size: 9px; letter-spacing: 0.03em; line-height: 1.6; }
 .contact-dot { flex: 0 0 auto; width: 6px; height: 6px; margin-top: 5px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 4px rgba(212, 165, 116, 0.13); }
 
 .contact-card { max-width: 960px; margin: 60px auto 0; padding: clamp(28px, 4vw, 44px); border: 1px solid var(--line-light); border-radius: 20px; background: rgba(250, 248, 243, 0.04); }
@@ -537,8 +544,10 @@ button { color: inherit; }
   .planner-ticket { right: 5%; bottom: 12%; width: 175px; padding: 14px; }
   .planner-ticket b { font-size: 23px; }
   .planner-ticket span { font-size: 7px; }
-  .planner-strokes { top: 16%; right: 6%; width: 85px; }
   .dialog-copy h2 { font-size: 4rem; }
+  .contact-buttons-group .button { font-size: 10px; padding: 12px 10px 12px 14px; gap: 12px; }
+  .contact-buttons-group .button-content { gap: 8px; }
+  .contact-buttons-group .button-icon { width: 14px; height: 14px; flex: 0 0 14px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
