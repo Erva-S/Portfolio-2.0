@@ -1,6 +1,5 @@
 import { Forminit } from "forminit";
 import { initPillNav } from "./PillNav.js";
-import { initFoldText } from "./FoldText.js";
 import { initScrollReveal } from "./ScrollReveal.js";
 
 const doc = document.documentElement;
@@ -752,23 +751,6 @@ function initLuminousType() {
 
 initLuminousType();
 
-/* --- React Bits: FoldText Engine (Hover-Triggered for Hero Title) --- */
-const heroFold = initFoldText("#hero-title", {
-  text: "building my way up.",
-  hinge: "top",
-  trigger: "hover",
-  duration: 0.72,
-  foldDuration: 0.22,
-  unfoldDuration: 0.52,
-  stagger: 0.022,
-  staggerFrom: "start",
-  foldAngle: 90,
-  ease: "power3.out",
-  perspective: 900,
-  creaseShading: 0.42
-});
-
 window.addEventListener("pagehide", () => {
-  heroFold?.destroy();
   scrollRevealInstances.forEach((instance) => instance.destroy());
 });
