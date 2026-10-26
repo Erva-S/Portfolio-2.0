@@ -14,6 +14,7 @@ export function initPillNav(container, options = {}) {
 
   const {
     items = [
+      { label: 'Home', href: '#top' },
       { label: 'Note', href: '#note' },
       { label: 'Work', href: '#work' },
       { label: 'About', href: '#about' },

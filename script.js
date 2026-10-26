@@ -110,11 +110,38 @@ const projects = {
 
 const orderedProjectIds = Object.keys(projects);
 
+let hasUserNavigated = false;
+
+const enableNavSync = () => {
+  hasUserNavigated = true;
+};
+
+window.addEventListener("wheel", enableNavSync, { once: true, passive: true });
+window.addEventListener("touchmove", enableNavSync, { once: true, passive: true });
+window.addEventListener("pointerdown", enableNavSync, { once: true, passive: true });
+window.addEventListener("keydown", (e) => {
+  if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Space", "Home", "End"].includes(e.key)) {
+    enableNavSync();
+  }
+}, { once: true, passive: true });
+
+setTimeout(() => {
+  const initialScrollY = window.scrollY;
+  window.addEventListener("scroll", () => {
+    if (!hasUserNavigated && Math.abs(window.scrollY - initialScrollY) > 30) {
+      hasUserNavigated = true;
+    }
+  }, { passive: true });
+}, 500);
+
 function updateScrollChrome() {
   const scrollable = document.documentElement.scrollHeight - window.innerHeight;
   const amount = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
   progress.style.width = `${amount}%`;
   header.classList.toggle("is-scrolled", window.scrollY > 30);
+  if (hasUserNavigated && window.scrollY < 80 && window.pillNav) {
+    window.pillNav.setActive(0, true);
+  }
 }
 
 function closeMenu() {
@@ -393,6 +420,7 @@ if ("IntersectionObserver" in window && !reducedMotion) {
 /* --- React Bits: PillNav Navigation Integration --- */
 const pillNav = initPillNav("#primary-nav", {
   items: [
+    { label: "Home", href: "#top" },
     { label: "Note", href: "#note" },
     { label: "Work", href: "#work" },
     { label: "About", href: "#about" },
@@ -413,29 +441,28 @@ const pillNav = initPillNav("#primary-nav", {
 
 window.pillNav = pillNav;
 
-const heroTarget = { el: document.querySelector("#top"), index: -1 };
 const sectionTargets = [
-  { id: "note", index: 0 },
-  { id: "work", index: 1 },
-  { id: "about", index: 2 },
-  { id: "proof", index: 3 },
-  { id: "work-with-me", index: 4 },
-  { id: "contact", index: 5 }
-].map(item => ({ el: document.querySelector(`#${item.id}`), index: item.index })).filter(item => Boolean(item.el));
-
-const allTargets = [heroTarget, ...sectionTargets].filter(t => Boolean(t.el));
+  { id: "top", index: 0 },
+  { id: "note", index: 1 },
+  { id: "work", index: 2 },
+  { id: "about", index: 3 },
+  { id: "proof", index: 4 },
+  { id: "work-with-me", index: 5 },
+  { id: "contact", index: 6 }
+].map(item => ({ id: item.id, el: document.querySelector(`#${item.id}`), index: item.index })).filter(item => Boolean(item.el));
 
 if ("IntersectionObserver" in window) {
   const sectionObserver = new IntersectionObserver((entries) => {
+    if (!hasUserNavigated) return;
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
-      const match = allTargets.find(t => t.el === entry.target);
+      const match = sectionTargets.find(t => t.el === entry.target);
       if (match && pillNav) {
         pillNav.setActive(match.index, true);
       }
     });
   }, { rootMargin: "-25% 0px -55% 0px", threshold: 0 });
-  allTargets.forEach((target) => sectionObserver.observe(target.el));
+  sectionTargets.forEach((target) => sectionObserver.observe(target.el));
 }
 
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
@@ -446,10 +473,12 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     if (!target) return;
     event.preventDefault();
     closeMenu();
+    hasUserNavigated = true;
     target.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
     window.history.pushState(null, "", href);
-    if (href === "#top") {
-      pillNav?.setActive(-1, true);
+    const match = sectionTargets.find(t => `#${t.id}` === href);
+    if (match && pillNav) {
+      pillNav.setActive(match.index, true);
     }
   });
 });
@@ -457,19 +486,23 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
 window.addEventListener("popstate", () => {
   const hash = window.location.hash;
   if (!hash || hash === "#top") {
-    pillNav?.setActive(-1, true);
+    if (hasUserNavigated && pillNav) {
+      pillNav.setActive(0, true);
+    }
     return;
   }
-  const match = sectionTargets.find(t => `#${t.el.id}` === hash);
+  const match = sectionTargets.find(t => `#${t.id}` === hash);
   if (match && pillNav) {
+    hasUserNavigated = true;
     pillNav.setActive(match.index, true);
     match.el.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
   }
 });
 
 if (window.location.hash && window.location.hash !== "#top") {
-  const match = sectionTargets.find(t => `#${t.el.id}` === window.location.hash);
+  const match = sectionTargets.find(t => `#${t.id}` === window.location.hash);
   if (match && pillNav) {
+    hasUserNavigated = true;
     pillNav.setActive(match.index, false);
   }
 } else {
