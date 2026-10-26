@@ -572,6 +572,7 @@ initLuminousType();
 
 /* --- React Bits: FoldText Engine (Hover-Triggered for Hero Title) --- */
 const heroFold = initFoldText("#hero-title", {
+  text: "a work in progress.",
   hinge: "top",
   trigger: "hover",
   duration: 0.72,

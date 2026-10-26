@@ -290,31 +290,10 @@ button { color: inherit; }
 .hero-line--one { color: var(--ink); }
 .hero-line--two { color: var(--gold); }
 .hero-title em {
-  position: relative;
   display: inline-block;
   color: var(--gold);
   font-weight: 400;
-  transition: color 260ms ease;
-}
-
-.hero-title em::after {
-  position: absolute;
-  right: 0;
-  bottom: 0.06em;
-  left: 0;
-  height: 2px;
-  background: currentColor;
-  content: "";
-  opacity: 0.7;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 380ms var(--ease-out);
-}
-
-.hero-title:hover em::after,
-.hero-title em:hover::after {
-  transform: scaleX(1);
-  transform-origin: left;
+  font-style: italic;
 }
 
 .display-title em, .section-title em, .contact-title em { color: var(--gold); font-weight: 400; }
