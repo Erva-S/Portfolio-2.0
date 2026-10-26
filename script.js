@@ -44,6 +44,10 @@ const formStartedAt = Date.now();
 const lastProjectFocus = { element: null };
 let activeProjectId = "aethera";
 let closingFromHistory = false;
+let pillNav = null;
+let currentActiveIndex = -1;
+let isClickNavigating = false;
+let clickNavTimer = null;
 
 const projects = {
   aethera: {
@@ -110,37 +114,13 @@ const projects = {
 
 const orderedProjectIds = Object.keys(projects);
 
-let hasUserNavigated = false;
-
-const enableNavSync = () => {
-  hasUserNavigated = true;
-};
-
-window.addEventListener("wheel", enableNavSync, { once: true, passive: true });
-window.addEventListener("touchmove", enableNavSync, { once: true, passive: true });
-window.addEventListener("pointerdown", enableNavSync, { once: true, passive: true });
-window.addEventListener("keydown", (e) => {
-  if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Space", "Home", "End"].includes(e.key)) {
-    enableNavSync();
-  }
-}, { once: true, passive: true });
-
-setTimeout(() => {
-  const initialScrollY = window.scrollY;
-  window.addEventListener("scroll", () => {
-    if (!hasUserNavigated && Math.abs(window.scrollY - initialScrollY) > 30) {
-      hasUserNavigated = true;
-    }
-  }, { passive: true });
-}, 500);
-
 function updateScrollChrome() {
   const scrollable = document.documentElement.scrollHeight - window.innerHeight;
   const amount = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
   progress.style.width = `${amount}%`;
   header.classList.toggle("is-scrolled", window.scrollY > 30);
-  if (hasUserNavigated && window.scrollY < 80 && window.pillNav) {
-    window.pillNav.setActive(0, true);
+  if (pillNav) {
+    updateActiveSection(true);
   }
 }
 
@@ -418,7 +398,7 @@ if ("IntersectionObserver" in window && !reducedMotion) {
 }
 
 /* --- React Bits: PillNav Navigation Integration --- */
-const pillNav = initPillNav("#primary-nav", {
+pillNav = initPillNav("#primary-nav", {
   items: [
     { label: "Home", href: "#top" },
     { label: "Note", href: "#note" },
@@ -442,72 +422,168 @@ const pillNav = initPillNav("#primary-nav", {
 window.pillNav = pillNav;
 
 const sectionTargets = [
-  { id: "top", index: 0 },
-  { id: "note", index: 1 },
-  { id: "work", index: 2 },
-  { id: "about", index: 3 },
-  { id: "proof", index: 4 },
-  { id: "work-with-me", index: 5 },
-  { id: "contact", index: 6 }
-].map(item => ({ id: item.id, el: document.querySelector(`#${item.id}`), index: item.index })).filter(item => Boolean(item.el));
+  { id: "top", index: 0, label: "Home" },
+  { id: "note", index: 1, label: "Note" },
+  { id: "work", index: 2, label: "Work" },
+  { id: "about", index: 3, label: "About" },
+  { id: "proof", index: 4, label: "Proof" },
+  { id: "work-with-me", index: 5, label: "Build" },
+  { id: "contact", index: 6, label: "Contact" }
+].map(item => ({ ...item, el: document.querySelector(`#${item.id}`) })).filter(item => Boolean(item.el));
 
+function determineActiveSection() {
+  const scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+  const viewportH = window.innerHeight || 800;
+  const scrollable = document.documentElement.scrollHeight - viewportH;
+
+  // 1. Top of the page (Hero section)
+  if (scrollY <= 80) {
+    return 0; // Home
+  }
+
+  // 2. Bottom of the page (Contact section)
+  if (scrollable > 0 && scrollY >= scrollable - 45) {
+    return 6; // Contact
+  }
+
+  // 3. Focal line detection: positioned comfortably below the fixed header
+  // Fixed header bottom is ~72px; sections have scroll-margin-top: clamp(80px, 10vh, 105px).
+  // A focal threshold between 110px and 140px ensures accurate detection of visible section.
+  const focalLine = Math.min(140, Math.max(95, viewportH * 0.16));
+
+  for (let i = sectionTargets.length - 1; i >= 0; i--) {
+    const target = sectionTargets[i];
+    const rect = target.el.getBoundingClientRect();
+    if (rect.top <= focalLine + 4 && rect.bottom > focalLine) {
+      return target.index;
+    }
+  }
+
+  // Fallback: choose section with highest viewport coverage
+  let bestIndex = 0;
+  let maxVisible = -1;
+  sectionTargets.forEach(target => {
+    const rect = target.el.getBoundingClientRect();
+    const visibleH = Math.max(0, Math.min(rect.bottom, viewportH) - Math.max(rect.top, 0));
+    if (visibleH > maxVisible) {
+      maxVisible = visibleH;
+      bestIndex = target.index;
+    }
+  });
+
+  return bestIndex;
+}
+
+function updateActiveSection(animate = true) {
+  if (isClickNavigating || !pillNav) return;
+  const nextIdx = determineActiveSection();
+  if (nextIdx !== currentActiveIndex) {
+    currentActiveIndex = nextIdx;
+    pillNav.setActive(nextIdx, animate);
+  }
+}
+
+// Observe sections with IntersectionObserver to trigger smooth updates alongside scroll events
 if ("IntersectionObserver" in window) {
-  const sectionObserver = new IntersectionObserver((entries) => {
-    if (!hasUserNavigated) return;
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      const match = sectionTargets.find(t => t.el === entry.target);
-      if (match && pillNav) {
-        pillNav.setActive(match.index, true);
-      }
-    });
-  }, { rootMargin: "-25% 0px -55% 0px", threshold: 0 });
+  let observerTicking = false;
+  const sectionObserver = new IntersectionObserver(() => {
+    if (isClickNavigating) return;
+    if (!observerTicking) {
+      observerTicking = true;
+      requestAnimationFrame(() => {
+        updateActiveSection(true);
+        observerTicking = false;
+      });
+    }
+  }, {
+    rootMargin: "-10% 0px -40% 0px",
+    threshold: [0, 0.2, 0.5, 0.8]
+  });
   sectionTargets.forEach((target) => sectionObserver.observe(target.el));
 }
 
+// Smooth anchor navigation without overshoot or conflicts
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", (event) => {
     const href = anchor.getAttribute("href");
     if (!href || href === "#") return;
     const target = document.querySelector(href);
     if (!target) return;
+
     event.preventDefault();
     closeMenu();
-    hasUserNavigated = true;
-    target.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
-    window.history.pushState(null, "", href);
+
     const match = sectionTargets.find(t => `#${t.id}` === href);
     if (match && pillNav) {
+      isClickNavigating = true;
+      if (clickNavTimer) clearTimeout(clickNavTimer);
+      currentActiveIndex = match.index;
       pillNav.setActive(match.index, true);
+
+      clickNavTimer = setTimeout(() => {
+        isClickNavigating = false;
+        updateActiveSection(false);
+      }, 850);
     }
+
+    if (href === "#top") {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: reducedMotion ? "auto" : "smooth"
+      });
+    } else {
+      target.scrollIntoView({
+        behavior: reducedMotion ? "auto" : "smooth",
+        block: "start"
+      });
+    }
+
+    window.history.pushState(null, "", href);
   });
 });
 
 window.addEventListener("popstate", () => {
   const hash = window.location.hash;
   if (!hash || hash === "#top") {
-    if (hasUserNavigated && pillNav) {
-      pillNav.setActive(0, true);
-    }
+    currentActiveIndex = 0;
+    pillNav?.setActive(0, true);
+    window.scrollTo({ top: 0, left: 0, behavior: reducedMotion ? "auto" : "smooth" });
     return;
   }
   const match = sectionTargets.find(t => `#${t.id}` === hash);
   if (match && pillNav) {
-    hasUserNavigated = true;
+    currentActiveIndex = match.index;
     pillNav.setActive(match.index, true);
     match.el.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
   }
 });
 
-if (window.location.hash && window.location.hash !== "#top") {
-  const match = sectionTargets.find(t => `#${t.id}` === window.location.hash);
-  if (match && pillNav) {
-    hasUserNavigated = true;
-    pillNav.setActive(match.index, false);
+// Initialize starting section correctly without forced jumps or wrong active item
+function initStartingNavigation() {
+  if (window.location.hash) {
+    const match = sectionTargets.find(t => `#${t.id}` === window.location.hash);
+    if (match && pillNav) {
+      currentActiveIndex = match.index;
+      pillNav.setActive(match.index, false);
+      return;
+    }
   }
-} else {
-  pillNav?.setActive(-1, false);
+
+  const scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+  if (scrollY > 80) {
+    // If the page was restored or opened at the second section (#note) or below
+    const initialIdx = determineActiveSection();
+    currentActiveIndex = initialIdx;
+    pillNav?.setActive(initialIdx, false);
+  } else {
+    // At the top of the page: set Home active
+    currentActiveIndex = 0;
+    pillNav?.setActive(0, false);
+  }
 }
+
+initStartingNavigation();
 
 requestAnimationFrame(() => document.body.classList.add("is-ready"));
 
