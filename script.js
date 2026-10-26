@@ -1,5 +1,5 @@
 import { Forminit } from "forminit";
-import { initGooeyNav } from "./GooeyNav.js";
+import { initPillNav } from "./PillNav.js";
 
 const doc = document.documentElement;
 doc.classList.add("js");
@@ -7,7 +7,7 @@ doc.classList.add("js");
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const header = document.querySelector("[data-header]");
 const progress = document.querySelector(".scroll-progress");
-const menuToggle = document.querySelector(".menu-toggle");
+const menuToggle = document.querySelector(".pill-nav__toggle");
 const primaryNav = document.querySelector(".primary-nav");
 const navLinks = [...document.querySelectorAll("[data-nav-link]")];
 const projectButtons = [...document.querySelectorAll("[data-project-id]")];
@@ -118,8 +118,12 @@ function updateScrollChrome() {
 
 function closeMenu() {
   primaryNav.classList.remove("is-open");
-  menuToggle.setAttribute("aria-expanded", "false");
-  menuToggle.setAttribute("aria-label", "Open navigation");
+  primaryNav.removeAttribute("data-open");
+  pillNav?.setMenuOpen(false);
+  if (menuToggle) {
+    menuToggle.setAttribute("aria-expanded", "false");
+    menuToggle.setAttribute("aria-label", "Open navigation");
+  }
 }
 
 function selectProject(id) {
@@ -385,38 +389,36 @@ if ("IntersectionObserver" in window && !reducedMotion) {
   revealItems.forEach((item) => item.classList.add("is-visible"));
 }
 
-/* --- React Bits: GooeyNav Navigation Integration --- */
-const gooeyNav = initGooeyNav("#primary-nav", {
+/* --- React Bits: PillNav Navigation Integration --- */
+const pillNav = initPillNav("#primary-nav", {
   items: [
+    { label: "Note", href: "#note" },
     { label: "Work", href: "#work" },
-    { label: "Work with me", href: "#work-with-me" },
     { label: "About", href: "#about" },
+    { label: "Proof", href: "#proof" },
+    { label: "Build", href: "#work-with-me" },
     { label: "Contact", href: "#contact" }
   ],
-  initialActiveIndex: 0,
-  theme: "light",
-  color: "#2a2219",
-  activeTextColor: "#faf8f3",
-  colors: ["#2a2219", "#d4a574"],
-  size: "md",
-  frame: true,
-  animationTime: 600,
-  particleCount: 15,
-  spread: 56,
-  timeVariance: 300,
-  gooeyness: 0.5,
-  wobble: 0.5,
-  hoverEffect: true,
-  onChange: () => {
+  defaultActiveIndex: 0,
+  hoverEffect: "glide",
+  indicator: "pill",
+  bounce: 0.35,
+  stretch: 0.45,
+  intro: true,
+  onItemClick: () => {
     closeMenu();
   }
 });
 
+window.pillNav = pillNav;
+
 const sectionTargets = [
-  { id: "work", index: 0 },
-  { id: "work-with-me", index: 1 },
+  { id: "note", index: 0 },
+  { id: "work", index: 1 },
   { id: "about", index: 2 },
-  { id: "contact", index: 3 }
+  { id: "proof", index: 3 },
+  { id: "work-with-me", index: 4 },
+  { id: "contact", index: 5 }
 ].map(item => ({ el: document.querySelector(`#${item.id}`), index: item.index })).filter(item => Boolean(item.el));
 
 if ("IntersectionObserver" in window) {
@@ -424,24 +426,43 @@ if ("IntersectionObserver" in window) {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
       const match = sectionTargets.find(t => t.el === entry.target);
-      if (match && gooeyNav) {
-        gooeyNav.setActive(match.index, true);
+      if (match && pillNav) {
+        pillNav.setActive(match.index, true);
       }
     });
-  }, { rootMargin: "-30% 0px -55% 0px", threshold: 0 });
+  }, { rootMargin: "-25% 0px -55% 0px", threshold: 0 });
   sectionTargets.forEach((target) => sectionObserver.observe(target.el));
 }
 
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", (event) => {
-    const target = document.querySelector(anchor.getAttribute("href"));
+    const href = anchor.getAttribute("href");
+    if (!href || href === "#") return;
+    const target = document.querySelector(href);
     if (!target) return;
     event.preventDefault();
     closeMenu();
     target.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
-    window.history.replaceState(null, "", anchor.getAttribute("href"));
+    window.history.pushState(null, "", href);
   });
 });
+
+window.addEventListener("popstate", () => {
+  const hash = window.location.hash;
+  if (!hash) return;
+  const match = sectionTargets.find(t => `#${t.el.id}` === hash);
+  if (match && pillNav) {
+    pillNav.setActive(match.index, true);
+    match.el.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
+  }
+});
+
+if (window.location.hash) {
+  const match = sectionTargets.find(t => `#${t.el.id}` === window.location.hash);
+  if (match && pillNav) {
+    pillNav.setActive(match.index, false);
+  }
+}
 
 requestAnimationFrame(() => document.body.classList.add("is-ready"));
 

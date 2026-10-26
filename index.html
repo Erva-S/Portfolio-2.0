@@ -28,42 +28,89 @@
             <span class="luminous-light" aria-hidden="true">Erva Savaliya</span>
           </span>
         </a>
-        <nav class="gooey-nav gooey-nav--md gooey-nav--framed primary-nav" id="primary-nav" aria-label="Primary navigation">
-          <span class="gooey-nav__rim"></span>
-          <div class="gooey-nav__stage">
-            <canvas class="gooey-nav__canvas" aria-hidden="true"></canvas>
-            <span class="gooey-nav__fallback" aria-hidden="true"></span>
-            <ul class="gooey-nav__list">
-              <li class="gooey-nav__item" data-gooey-index="0" data-active="">
-                <a href="#work" class="gooey-nav__link" aria-current="page" data-nav-link>
-                  <span class="gooey-nav__label">Work</span>
-                </a>
-              </li>
-              <li class="gooey-nav__item" data-gooey-index="1">
-                <a href="#work-with-me" class="gooey-nav__link" data-nav-link>
-                  <span class="gooey-nav__label">Work with me</span>
-                </a>
-              </li>
-              <li class="gooey-nav__item" data-gooey-index="2">
-                <a href="#about" class="gooey-nav__link" data-nav-link>
-                  <span class="gooey-nav__label">About</span>
-                </a>
-              </li>
-              <li class="gooey-nav__item" data-gooey-index="3">
-                <a href="#contact" class="gooey-nav__link" data-nav-link>
-                  <span class="gooey-nav__label">Contact</span>
-                </a>
-              </li>
+        <nav class="pill-nav pill-nav__surface primary-nav" id="primary-nav" aria-label="Primary navigation">
+          <div class="pill-nav__bar pill-nav__surface">
+            <div class="pill-nav__track">
+              <ul class="pill-nav__list">
+                <li class="pill-nav__slot" data-index="0">
+                  <a href="#note" class="pill-nav__item" aria-current="page" data-nav-link>
+                    <span class="pill-nav__fill" aria-hidden="true"></span>
+                    <span class="pill-nav__face">Note</span>
+                    <span class="pill-nav__face-alt" aria-hidden="true">Note</span>
+                  </a>
+                </li>
+                <li class="pill-nav__slot" data-index="1">
+                  <a href="#work" class="pill-nav__item" data-nav-link>
+                    <span class="pill-nav__fill" aria-hidden="true"></span>
+                    <span class="pill-nav__face">Work</span>
+                    <span class="pill-nav__face-alt" aria-hidden="true">Work</span>
+                  </a>
+                </li>
+                <li class="pill-nav__slot" data-index="2">
+                  <a href="#about" class="pill-nav__item" data-nav-link>
+                    <span class="pill-nav__fill" aria-hidden="true"></span>
+                    <span class="pill-nav__face">About</span>
+                    <span class="pill-nav__face-alt" aria-hidden="true">About</span>
+                  </a>
+                </li>
+                <li class="pill-nav__slot" data-index="3">
+                  <a href="#proof" class="pill-nav__item" data-nav-link>
+                    <span class="pill-nav__fill" aria-hidden="true"></span>
+                    <span class="pill-nav__face">Proof</span>
+                    <span class="pill-nav__face-alt" aria-hidden="true">Proof</span>
+                  </a>
+                </li>
+                <li class="pill-nav__slot" data-index="4">
+                  <a href="#work-with-me" class="pill-nav__item" data-nav-link>
+                    <span class="pill-nav__fill" aria-hidden="true"></span>
+                    <span class="pill-nav__face">Build</span>
+                    <span class="pill-nav__face-alt" aria-hidden="true">Build</span>
+                  </a>
+                </li>
+                <li class="pill-nav__slot" data-index="5">
+                  <a href="#contact" class="pill-nav__item" data-nav-link>
+                    <span class="pill-nav__fill" aria-hidden="true"></span>
+                    <span class="pill-nav__face">Contact</span>
+                    <span class="pill-nav__face-alt" aria-hidden="true">Contact</span>
+                  </a>
+                </li>
+              </ul>
+              <span class="pill-nav__glide" aria-hidden="true"></span>
+              <div class="pill-nav__ink" aria-hidden="true">
+                <span class="pill-nav__ink-item">Note</span>
+                <span class="pill-nav__ink-item">Work</span>
+                <span class="pill-nav__ink-item">About</span>
+                <span class="pill-nav__ink-item">Proof</span>
+                <span class="pill-nav__ink-item">Build</span>
+                <span class="pill-nav__ink-item">Contact</span>
+              </div>
+              <span class="pill-nav__dot" aria-hidden="true"></span>
+            </div>
+            <span class="pill-nav__rim" aria-hidden="true"></span>
+          </div>
+
+          <!-- Mobile Hamburger Toggle -->
+          <button class="pill-nav__toggle pill-nav__surface" type="button" aria-expanded="false" aria-label="Open navigation" aria-controls="mobile-nav-panel">
+            <span class="pill-nav__burger" aria-hidden="true">
+              <span class="pill-nav__line pill-nav__line--top"></span>
+              <span class="pill-nav__line pill-nav__line--bottom"></span>
+            </span>
+            <span class="pill-nav__rim" aria-hidden="true"></span>
+          </button>
+
+          <!-- Mobile Drawer Panel -->
+          <div class="pill-nav__panel pill-nav__surface" id="mobile-nav-panel">
+            <ul class="pill-nav__menu">
+              <li data-index="0"><a href="#note" class="pill-nav__row" aria-current="page" data-nav-link>Note</a></li>
+              <li data-index="1"><a href="#work" class="pill-nav__row" data-nav-link>Work</a></li>
+              <li data-index="2"><a href="#about" class="pill-nav__row" data-nav-link>About</a></li>
+              <li data-index="3"><a href="#proof" class="pill-nav__row" data-nav-link>Proof</a></li>
+              <li data-index="4"><a href="#work-with-me" class="pill-nav__row" data-nav-link>Build</a></li>
+              <li data-index="5"><a href="#contact" class="pill-nav__row" data-nav-link>Contact</a></li>
             </ul>
-            <ul class="gooey-nav__list gooey-nav__list--active" aria-hidden="true">
-              <li class="gooey-nav__item"><span class="gooey-nav__link"><span class="gooey-nav__label">Work</span></span></li>
-              <li class="gooey-nav__item"><span class="gooey-nav__link"><span class="gooey-nav__label">Work with me</span></span></li>
-              <li class="gooey-nav__item"><span class="gooey-nav__link"><span class="gooey-nav__label">About</span></span></li>
-              <li class="gooey-nav__item"><span class="gooey-nav__link"><span class="gooey-nav__label">Contact</span></span></li>
-            </ul>
+            <span class="pill-nav__rim" aria-hidden="true"></span>
           </div>
         </nav>
-        <button class="menu-toggle" type="button" aria-controls="primary-nav" aria-expanded="false" aria-label="Open navigation"><span></span><span></span></button>
       </div>
     </header>
 
@@ -95,7 +142,7 @@
         </div>
       </section>
 
-      <section class="statement section-pad" aria-labelledby="statement-title">
+      <section class="statement section-pad" id="note" aria-labelledby="statement-title">
         <div class="section-rail reveal reveal--fade"><span>02 — A short note</span><span>Why this exists</span></div>
         <div class="statement-layout">
           <h2 class="display-title reveal reveal--shift" id="statement-title">I’m interested in the moment an idea becomes <em>something you can use.</em></h2>
@@ -140,7 +187,7 @@
         </div>
       </section>
 
-      <section class="milestones section-pad" aria-labelledby="milestones-title">
+      <section class="milestones section-pad" id="proof" aria-labelledby="milestones-title">
         <div class="section-rail reveal reveal--fade"><span>05 — Milestones</span><span>A compact record</span></div>
         <div class="milestones-layout"><h2 class="section-title reveal reveal--shift" id="milestones-title">What the trajectory<br /><em>looks like now.</em></h2><div class="milestone-list"><div class="milestone reveal reveal--rise"><span>Now</span><div><h3>Second-year CSE student</h3><p>CSPIT, CHARUSAT · building foundations through coursework, projects, and collaboration.</p></div></div><div class="milestone reveal reveal--rise"><span>Focus</span><div><h3>Frontend + software engineering</h3><p>Interfaces with enough structure underneath them to be useful, testable, and understandable.</p></div></div><div class="milestone reveal reveal--rise"><span>Explore</span><div><h3>Security learning in progress</h3><p>CTFs, OSINT, networking, and digital-forensics curiosity — not a professional security service.</p></div></div></div></div>
       </section>

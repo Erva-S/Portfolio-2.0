@@ -1,4 +1,9 @@
-@import "./GooeyNav.css";
+@import "./PillNav.css";
+
+/* Section scroll margin so headings are never obscured by fixed header */
+section[id] {
+  scroll-margin-top: clamp(80px, 10vh, 105px);
+}
 
 :root {
   --paper: #faf8f3;
@@ -228,14 +233,11 @@ button { color: inherit; }
   opacity: 1;
 }
 
-.primary-nav.gooey-nav {
+.primary-nav.pill-nav {
   margin-left: auto;
 }
 
-.menu-toggle { display: none; width: 42px; height: 42px; padding: 11px 9px; border: 1px solid var(--line); border-radius: 50%; background: transparent; cursor: pointer; }
-.menu-toggle span { display: block; height: 1px; margin: 5px 0; background: var(--ink); transition: transform 250ms var(--ease-out); }
-.menu-toggle[aria-expanded="true"] span:first-child { transform: translateY(3px) rotate(45deg); }
-.menu-toggle[aria-expanded="true"] span:last-child { transform: translateY(-3px) rotate(-45deg); }
+.menu-toggle { display: none; }
 
 .hero {
   position: relative;
@@ -618,59 +620,8 @@ button { color: inherit; }
   .site-header { padding: 12px 5vw; }
   .site-header.is-scrolled { padding-top: 10px; padding-bottom: 10px; }
   .nav-wrap { justify-content: space-between; padding: 8px 14px; }
-  .menu-toggle { display: block; }
-  .primary-nav.gooey-nav {
-    position: absolute;
-    top: calc(100% + 9px);
-    right: 0;
-    left: 0;
-    display: block;
-    padding: 8px;
-    border: 1px solid var(--line);
-    border-radius: 19px;
-    background: rgba(250, 248, 243, 0.96);
-    box-shadow: 0 20px 40px rgba(42, 34, 25, 0.08);
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(-8px);
-    transition: opacity 220ms ease, transform 220ms var(--ease-out);
-    backdrop-filter: blur(18px);
-  }
-  .primary-nav.gooey-nav.is-open {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
-  }
-  .primary-nav.gooey-nav .gooey-nav__stage {
-    width: 100%;
-  }
-  .primary-nav.gooey-nav .gooey-nav__canvas,
-  .primary-nav.gooey-nav .gooey-nav__rim,
-  .primary-nav.gooey-nav .gooey-nav__fallback,
-  .primary-nav.gooey-nav .gooey-nav__list--active {
-    display: none !important;
-  }
-  .primary-nav.gooey-nav .gooey-nav__list {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 4px;
-    width: 100%;
-  }
-  .primary-nav.gooey-nav .gooey-nav__item {
-    width: 100%;
-  }
-  .primary-nav.gooey-nav .gooey-nav__link {
-    width: 100%;
-    padding: 12px 14px;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--ink-soft);
-  }
-  .primary-nav.gooey-nav .gooey-nav__item[data-active] .gooey-nav__link,
-  .primary-nav.gooey-nav .gooey-nav__link:hover {
-    background: var(--paper-deep);
-    color: var(--ink);
+  .primary-nav.pill-nav {
+    margin-left: auto;
   }
 
   .hero { min-height: auto; padding-top: 105px; padding-bottom: 28px; }
