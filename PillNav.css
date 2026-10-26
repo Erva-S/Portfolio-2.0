@@ -143,13 +143,11 @@
   transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.pill-nav__slot[data-on] .pill-nav__face,
 .pill-nav__slot[data-hover] .pill-nav__face {
   transform: translateY(calc(var(--pn-roll) * -1));
   transition-duration: 0.45s;
 }
 
-.pill-nav__slot[data-on] .pill-nav__face-alt,
 .pill-nav__slot[data-hover] .pill-nav__face-alt {
   transform: translateY(0);
   transition-duration: 0.45s;
@@ -175,7 +173,6 @@
   pointer-events: none;
 }
 
-.pill-nav[data-hover-effect="fill"] .pill-nav__slot[data-on] .pill-nav__fill,
 .pill-nav[data-hover-effect="fill"] .pill-nav__slot[data-hover] .pill-nav__fill {
   transform: scale(1);
   transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);

@@ -1,6 +1,7 @@
 import { Forminit } from "forminit";
 import { initPillNav } from "./PillNav.js";
 import { initFoldText } from "./FoldText.js";
+import { initScrollReveal } from "./ScrollReveal.js";
 
 const doc = document.documentElement;
 doc.classList.add("js");
@@ -46,8 +47,11 @@ let activeProjectId = "aethera";
 let closingFromHistory = false;
 let pillNav = null;
 let currentActiveIndex = -1;
-let isClickNavigating = false;
-let clickNavTimer = null;
+let activeSectionFrame = 0;
+let navigationHasStarted = false;
+let initialScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+let programmaticTargetIndex = null;
+let preserveInitialUnselected = window.location.hash === "#note";
 
 const projects = {
   aethera: {
@@ -119,9 +123,10 @@ function updateScrollChrome() {
   const amount = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
   progress.style.width = `${amount}%`;
   header.classList.toggle("is-scrolled", window.scrollY > 30);
-  if (pillNav) {
-    updateActiveSection(true);
-  }
+  if (pillNav && !preserveInitialUnselected && Math.abs(window.scrollY - initialScrollY) > 1) navigationHasStarted = true;
+  if (programmaticTargetIndex !== null && programmaticTargetReached()) finishProgrammaticNavigation();
+  if (pillNav && navigationHasStarted) pillNav.replayActive(true);
+  scheduleActiveSectionUpdate();
 }
 
 function closeMenu() {
@@ -316,6 +321,10 @@ function cycleProject(direction) {
 }
 
 window.addEventListener("scroll", updateScrollChrome, { passive: true });
+window.addEventListener("resize", () => {
+  updateScrollChrome();
+  pillNav?.refresh();
+}, { passive: true });
 updateScrollChrome();
 
 menuToggle.addEventListener("click", () => {
@@ -383,6 +392,24 @@ window.addEventListener("hashchange", syncProjectFromLocation);
 syncProjectFromLocation();
 setInquiryContext("");
 
+const scrollRevealInstances = [...document.querySelectorAll("[data-scroll-reveal]")]
+  .map((element) => initScrollReveal(element, {
+    enableBlur: true,
+    baseOpacity: 0.16,
+    baseRotation: 0,
+    blurStrength: 2.5,
+    baseOffset: 0,
+    stagger: 0.045,
+    smoothing: 0.12,
+    splitBy: "words",
+    effect: "fade",
+    mode: "scrub",
+    duration: 0.8,
+    rotationEnd: "bottom bottom",
+    wordAnimationEnd: "bottom bottom"
+  }))
+  .filter(Boolean);
+
 const revealItems = document.querySelectorAll(".reveal");
 if ("IntersectionObserver" in window && !reducedMotion) {
   const revealObserver = new IntersectionObserver((entries, observer) => {
@@ -409,7 +436,7 @@ pillNav = initPillNav("#primary-nav", {
     { label: "Contact", href: "#contact" }
   ],
   defaultActiveIndex: -1,
-  hoverEffect: "glide",
+  hoverEffect: "fill",
   indicator: "pill",
   bounce: 0.35,
   stretch: 0.45,
@@ -430,6 +457,18 @@ const sectionTargets = [
   { id: "work-with-me", index: 5, label: "Build" },
   { id: "contact", index: 6, label: "Contact" }
 ].map(item => ({ ...item, el: document.querySelector(`#${item.id}`) })).filter(item => Boolean(item.el));
+
+function programmaticTargetReached() {
+  const target = sectionTargets[programmaticTargetIndex];
+  if (!target) return false;
+
+  const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+  if (target.index === 0) return window.scrollY <= 1;
+  if (target.index === sectionTargets.length - 1) return window.scrollY >= scrollable - 1;
+
+  const scrollMarginTop = parseFloat(getComputedStyle(target.el).scrollMarginTop) || 0;
+  return Math.abs(target.el.getBoundingClientRect().top - scrollMarginTop) <= 2;
+}
 
 function determineActiveSection() {
   const scrollY = window.scrollY || document.documentElement.scrollTop || 0;
@@ -475,7 +514,8 @@ function determineActiveSection() {
 }
 
 function updateActiveSection(animate = true) {
-  if (isClickNavigating || !pillNav) return;
+  if (!pillNav || !navigationHasStarted || programmaticTargetIndex !== null) return;
+
   const nextIdx = determineActiveSection();
   if (nextIdx !== currentActiveIndex) {
     currentActiveIndex = nextIdx;
@@ -483,24 +523,45 @@ function updateActiveSection(animate = true) {
   }
 }
 
-// Observe sections with IntersectionObserver to trigger smooth updates alongside scroll events
-if ("IntersectionObserver" in window) {
-  let observerTicking = false;
-  const sectionObserver = new IntersectionObserver(() => {
-    if (isClickNavigating) return;
-    if (!observerTicking) {
-      observerTicking = true;
-      requestAnimationFrame(() => {
-        updateActiveSection(true);
-        observerTicking = false;
-      });
-    }
-  }, {
-    rootMargin: "-10% 0px -40% 0px",
-    threshold: [0, 0.2, 0.5, 0.8]
+function scheduleActiveSectionUpdate() {
+  if (activeSectionFrame || !pillNav || !navigationHasStarted || programmaticTargetIndex !== null) return;
+  activeSectionFrame = requestAnimationFrame(() => {
+    activeSectionFrame = 0;
+    updateActiveSection(true);
   });
-  sectionTargets.forEach((target) => sectionObserver.observe(target.el));
 }
+
+function cancelProgrammaticNavigation() {
+  if (programmaticTargetIndex === null) return;
+  programmaticTargetIndex = null;
+  scheduleActiveSectionUpdate();
+}
+
+function finishProgrammaticNavigation() {
+  if (programmaticTargetIndex === null) return;
+  programmaticTargetIndex = null;
+  scheduleActiveSectionUpdate();
+}
+
+// Any real navigation input removes the initial unselected state. The scroll
+// handler also detects scrollbar/programmatic movement, so tracking has one
+// continuous source of truth regardless of how the page moved.
+const markNavigationStarted = () => {
+  preserveInitialUnselected = false;
+  cancelProgrammaticNavigation();
+  if (navigationHasStarted) return;
+  navigationHasStarted = true;
+  scheduleActiveSectionUpdate();
+};
+window.addEventListener("wheel", markNavigationStarted, { passive: true });
+window.addEventListener("touchmove", markNavigationStarted, { passive: true });
+window.addEventListener("pointerdown", cancelProgrammaticNavigation, { passive: true });
+window.addEventListener("keydown", (e) => {
+  if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Space", "Home", "End"].includes(e.key)) {
+    markNavigationStarted();
+  }
+}, { passive: true });
+if ("onscrollend" in window) window.addEventListener("scrollend", finishProgrammaticNavigation, { passive: true });
 
 // Smooth anchor navigation without overshoot or conflicts
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
@@ -512,18 +573,14 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
 
     event.preventDefault();
     closeMenu();
+    preserveInitialUnselected = false;
+    navigationHasStarted = true;
 
     const match = sectionTargets.find(t => `#${t.id}` === href);
+    programmaticTargetIndex = match ? match.index : null;
     if (match && pillNav) {
-      isClickNavigating = true;
-      if (clickNavTimer) clearTimeout(clickNavTimer);
       currentActiveIndex = match.index;
       pillNav.setActive(match.index, true);
-
-      clickNavTimer = setTimeout(() => {
-        isClickNavigating = false;
-        updateActiveSection(false);
-      }, 850);
     }
 
     if (href === "#top") {
@@ -540,12 +597,16 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     }
 
     window.history.pushState(null, "", href);
+    scheduleActiveSectionUpdate();
   });
 });
 
 window.addEventListener("popstate", () => {
   const hash = window.location.hash;
   if (!hash || hash === "#top") {
+    preserveInitialUnselected = false;
+    navigationHasStarted = true;
+    programmaticTargetIndex = 0;
     currentActiveIndex = 0;
     pillNav?.setActive(0, true);
     window.scrollTo({ top: 0, left: 0, behavior: reducedMotion ? "auto" : "smooth" });
@@ -553,34 +614,46 @@ window.addEventListener("popstate", () => {
   }
   const match = sectionTargets.find(t => `#${t.id}` === hash);
   if (match && pillNav) {
+    preserveInitialUnselected = false;
+    navigationHasStarted = true;
+    programmaticTargetIndex = match.index;
     currentActiveIndex = match.index;
     pillNav.setActive(match.index, true);
     match.el.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
+    scheduleActiveSectionUpdate();
   }
 });
 
-// Initialize starting section correctly without forced jumps or wrong active item
+// Keep the initial navigation state unselected. The first real scroll or
+// anchor navigation opts into continuous section tracking.
 function initStartingNavigation() {
   if (window.location.hash) {
+    if (window.location.hash === "#top") {
+      navigationHasStarted = true;
+      currentActiveIndex = 0;
+      pillNav?.setActive(0, false);
+      return;
+    }
+    if (window.location.hash === "#note") {
+      preserveInitialUnselected = true;
+      navigationHasStarted = false;
+      currentActiveIndex = -1;
+      pillNav?.setActive(-1, false);
+      return;
+    }
     const match = sectionTargets.find(t => `#${t.id}` === window.location.hash);
     if (match && pillNav) {
+      preserveInitialUnselected = false;
+      navigationHasStarted = true;
       currentActiveIndex = match.index;
       pillNav.setActive(match.index, false);
       return;
     }
   }
 
-  const scrollY = window.scrollY || document.documentElement.scrollTop || 0;
-  if (scrollY > 80) {
-    // If the page was restored or opened at the second section (#note) or below
-    const initialIdx = determineActiveSection();
-    currentActiveIndex = initialIdx;
-    pillNav?.setActive(initialIdx, false);
-  } else {
-    // At the top of the page: set Home active
-    currentActiveIndex = 0;
-    pillNav?.setActive(0, false);
-  }
+  currentActiveIndex = -1;
+  navigationHasStarted = false;
+  pillNav?.setActive(-1, false);
 }
 
 initStartingNavigation();
@@ -697,6 +770,5 @@ const heroFold = initFoldText("#hero-title", {
 
 window.addEventListener("pagehide", () => {
   heroFold?.destroy();
+  scrollRevealInstances.forEach((instance) => instance.destroy());
 });
-
-

@@ -420,8 +420,16 @@ export function initPillNav(container, options = {}) {
     wake();
   }
 
+  function replayActive(animate = true) {
+    if (activeIndex < 0 || !animate || reduce) return;
+    state.pop = Math.min(state.pop, 0.96);
+    state.sliding = true;
+    wake();
+  }
+
   return {
     setActive,
+    replayActive,
     getActiveIndex: () => activeIndex,
     setMenuOpen: val => setMenuOpen(val),
     isMenuOpen: () => open,
