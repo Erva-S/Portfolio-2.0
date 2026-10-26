@@ -308,8 +308,6 @@ button { color: inherit; }
 .button--light:hover { border-color: var(--gold); background: var(--gold); }
 .button--outline { border: 1px solid var(--line-light); background: transparent; color: var(--paper); }
 .button--outline:hover { border-color: var(--gold); color: var(--gold); }
-.button-arrow { display: grid; width: 27px; height: 27px; place-items: center; border: 1px solid currentColor; border-radius: 50%; font-size: 14px; transition: transform 240ms var(--ease-out); }
-.button:hover .button-arrow { transform: rotate(-45deg); }
 .button-content { display: inline-flex; align-items: center; gap: 10px; min-width: 0; }
 .button-icon { width: 15px; height: 15px; flex: 0 0 15px; transition: transform 240ms var(--ease-out); }
 .button:hover .button-icon { transform: scale(1.1); }
@@ -339,13 +337,11 @@ button { color: inherit; }
 .work-heading > p { max-width: 320px; margin: 0; color: var(--muted); font-size: 14.5px; line-height: 1.6; }
 .work-shell { display: grid; grid-template-columns: minmax(0, 0.88fr) minmax(360px, 1.12fr); gap: clamp(36px, 5vw, 72px); max-width: var(--container-max, 1180px); margin: 0 auto; }
 .project-index { border-top: 1px solid var(--line); }
-.project-item { display: grid; grid-template-columns: 38px minmax(0, 1fr) auto 28px; gap: 12px; align-items: center; width: 100%; padding: 18px 0; border: 0; border-bottom: 1px solid var(--line); background: transparent; color: var(--muted); text-align: left; cursor: pointer; user-select: text; -webkit-user-select: text; transition: color 280ms ease, padding 320ms var(--ease-out), background 280ms ease; }
+.project-item { display: grid; grid-template-columns: 38px minmax(0, 1fr) auto; gap: 12px; align-items: center; width: 100%; padding: 18px 0; border: 0; border-bottom: 1px solid var(--line); background: transparent; color: var(--muted); text-align: left; cursor: pointer; user-select: text; -webkit-user-select: text; transition: color 280ms ease, padding 320ms var(--ease-out), background 280ms ease; }
 .project-item:hover, .project-item:focus-visible, .project-item.is-selected { padding-right: 14px; padding-left: 14px; color: var(--ink); background: var(--paper-deep); }
 .project-index-number { color: var(--gold); font-family: var(--serif); font-size: 22px; line-height: 1; }
 .project-index-name { min-width: 0; overflow: hidden; font-family: var(--serif); font-size: clamp(1.65rem, 2.6vw, 2.65rem); letter-spacing: -0.04em; line-height: 0.95; text-overflow: ellipsis; white-space: nowrap; }
 .project-index-meta { font-size: 8px; text-align: right; white-space: nowrap; }
-.project-index-arrow { display: grid; width: 28px; height: 28px; place-items: center; border: 1px solid var(--line); border-radius: 50%; color: var(--gold); font-size: 16px; transition: transform 280ms var(--ease-out), background 220ms ease, color 220ms ease; }
-.project-item:hover .project-index-arrow, .project-item.is-selected .project-index-arrow { background: var(--ink); color: var(--paper); transform: rotate(-45deg); }
 .index-footnote { display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: start; max-width: 380px; margin-top: 24px; color: var(--muted); font-size: 9px; letter-spacing: 0.04em; line-height: 1.6; text-transform: none; }
 .index-footnote p { margin: 0; }
 .index-footnote-mark { display: grid; width: 26px; height: 26px; place-items: center; border: 1px solid var(--gold); border-radius: 50%; color: var(--gold); font-size: 16px; }
@@ -585,7 +581,6 @@ button { color: inherit; }
   .project-index-meta { display: block; font-size: 7px; }
   .project-item { grid-template-columns: 34px minmax(0, 1fr) auto; gap: 10px; padding: 16px 0; }
   .project-index-name { font-size: clamp(1.65rem, 7vw, 2.3rem); }
-  .project-index-arrow { width: 26px; height: 26px; }
   .project-preview { min-height: 380px; border-radius: 20px; }
   .preview-aethera-words { top: 22%; font-size: clamp(2.8rem, 12vw, 5rem); }
   .preview-aethera-panel { right: 6%; bottom: 10%; }
