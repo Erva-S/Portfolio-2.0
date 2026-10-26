@@ -1,5 +1,6 @@
 import { Forminit } from "forminit";
 import { initPillNav } from "./PillNav.js";
+import { initFoldText } from "./FoldText.js";
 
 const doc = document.documentElement;
 doc.classList.add("js");
@@ -558,113 +559,20 @@ function initLuminousType() {
 
 initLuminousType();
 
-/* --- React Bits Pro: Cipher Reveal Engine (Hover Only for Hero Title) --- */
-function initCipherReveal() {
-  const title = document.querySelector(".hero-title.cipher-reveal");
-  if (!title) return;
+/* --- React Bits: FoldText Engine (Plays once on mount/load for Hero Title) --- */
+const heroFold = initFoldText("#hero-title", {
+  hinge: "top",
+  duration: 0.75,
+  stagger: 0.026,
+  staggerFrom: "start",
+  foldAngle: 90,
+  ease: "power3.out",
+  perspective: 900,
+  creaseShading: 0.42
+});
 
-  const chars = Array.from(title.querySelectorAll(".cipher-char"));
-  if (!chars.length) return;
+window.addEventListener("pagehide", () => {
+  heroFold?.destroy();
+});
 
-  const CIPHER_GLYPHS = "0123456789ABCDEF!#$&*+-/<>?@[]~";
-  let isAnimating = false;
-  let animId = null;
-
-  function cancelAndRestore() {
-    if (animId) {
-      cancelAnimationFrame(animId);
-      animId = null;
-    }
-    if (!isAnimating && !title.classList.contains("is-cipher-active")) {
-      return;
-    }
-    isAnimating = false;
-    title.classList.remove("is-cipher-active");
-    chars.forEach((c) => {
-      if (c.textContent !== c.dataset.orig) {
-        c.textContent = c.dataset.orig;
-      }
-      c.classList.remove("is-scrambling");
-      c.style.width = "";
-      c.style.textAlign = "";
-    });
-  }
-
-  function triggerCipher() {
-    if (isAnimating) return;
-    const sel = window.getSelection();
-    if (sel && sel.toString().trim().length > 0) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-    isAnimating = true;
-    title.classList.add("is-cipher-active");
-
-    // Lock widths dynamically at current rendered size so scrambling never shifts layout
-    const originalWidths = chars.map((c) => {
-      const rect = c.getBoundingClientRect();
-      return rect.width > 0 ? rect.width : null;
-    });
-
-    chars.forEach((c, i) => {
-      if (originalWidths[i]) {
-        c.style.width = `${originalWidths[i].toFixed(2)}px`;
-        c.style.textAlign = "center";
-      }
-      c.classList.add("is-scrambling");
-    });
-
-    const startTime = performance.now();
-    let lastGlyphUpdate = startTime;
-    const charDelay = 26; // progressive cascade delay per character
-    const baseDuration = 140; // minimum initial scramble duration
-
-    function update(now) {
-      const currentSel = window.getSelection();
-      if (currentSel && currentSel.toString().trim().length > 0) {
-        cancelAndRestore();
-        return;
-      }
-
-      const elapsed = now - startTime;
-      const shouldUpdateGlyphs = (now - lastGlyphUpdate) > 36;
-      if (shouldUpdateGlyphs) {
-        lastGlyphUpdate = now;
-      }
-
-      let allResolved = true;
-
-      chars.forEach((c, i) => {
-        const resolveTime = baseDuration + (i * charDelay);
-
-        if (elapsed < resolveTime) {
-          allResolved = false;
-          if (shouldUpdateGlyphs) {
-            const rand = CIPHER_GLYPHS[Math.floor(Math.random() * CIPHER_GLYPHS.length)];
-            c.textContent = rand;
-          }
-        } else {
-          if (c.textContent !== c.dataset.orig) {
-            c.textContent = c.dataset.orig;
-            c.classList.remove("is-scrambling");
-          }
-        }
-      });
-
-      if (!allResolved) {
-        animId = requestAnimationFrame(update);
-      } else {
-        cancelAndRestore();
-      }
-    }
-
-    animId = requestAnimationFrame(update);
-  }
-
-  title.addEventListener("pointerenter", triggerCipher, { passive: true });
-  title.addEventListener("pointerdown", cancelAndRestore, { passive: true });
-  title.addEventListener("mousedown", cancelAndRestore, { passive: true });
-  title.addEventListener("selectstart", cancelAndRestore, { passive: true });
-}
-
-initCipherReveal();
 

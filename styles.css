@@ -1,4 +1,5 @@
 @import "./PillNav.css";
+@import "./FoldText.css";
 
 /* Section scroll margin so headings are never obscured by fixed header */
 section[id] {
@@ -284,49 +285,10 @@ button { color: inherit; }
   color: var(--gold);
   margin: 0 4px;
 }
-.hero-title { max-width: 1060px; margin: 0; font-family: var(--serif); font-size: clamp(3.5rem, 7.2vw, 7.8rem); font-weight: 500; letter-spacing: -0.075em; line-height: 0.88; }
-.hero-line { display: block; overflow: hidden; white-space: nowrap; }
-.hero-line > span { display: inline-block; transform: translateY(120%); }
-.hero-line--one > span { transition-delay: 100ms; }
-.hero-line--two > span { transition-delay: 210ms; }
-.hero-line--three > span { transition-delay: 320ms; }
-.is-ready .hero-line > span { transform: translateY(0); transition: transform 1050ms var(--ease-out); }
-
-/* --- React Bits Pro: Cipher Reveal (Headline Decodes on Hover) --- */
-.hero-title.cipher-reveal {
-  user-select: text;
-  -webkit-user-select: text;
-}
-
-.cipher-word {
-  display: inline;
-  white-space: nowrap;
-}
-
-.cipher-char {
-  display: inline;
-  vertical-align: baseline;
-  user-select: text;
-  -webkit-user-select: text;
-  transition: color 120ms ease, opacity 120ms ease;
-  will-change: contents;
-}
-
-.cipher-char.is-scrambling {
-  color: var(--gold);
-  opacity: 0.95;
-  text-shadow: 0 0 14px rgba(212, 165, 116, 0.45);
-}
-
-.hero-title.cipher-reveal em .cipher-char {
-  color: var(--gold);
-}
-
-.hero-title.cipher-reveal em .cipher-char.is-scrambling {
-  color: var(--ink);
-  opacity: 0.92;
-  text-shadow: 0 0 12px rgba(42, 34, 25, 0.35);
-}
+.hero-title, .hero-title.fold-text { max-width: 1060px; margin: 0; font-family: var(--serif); font-size: clamp(3.5rem, 7.2vw, 7.8rem); font-weight: 500; letter-spacing: -0.075em; line-height: 0.88; }
+.hero-line { display: block; white-space: nowrap; }
+.hero-line--one { color: var(--ink); }
+.hero-line--two { color: var(--gold); }
 .hero-title em {
   position: relative;
   display: inline-block;
@@ -731,5 +693,4 @@ button { color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
-  .hero-line > span { transform: translateY(0); }
 }
