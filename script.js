@@ -400,12 +400,12 @@ const pillNav = initPillNav("#primary-nav", {
     { label: "Build", href: "#work-with-me" },
     { label: "Contact", href: "#contact" }
   ],
-  defaultActiveIndex: 0,
+  defaultActiveIndex: -1,
   hoverEffect: "glide",
   indicator: "pill",
   bounce: 0.35,
   stretch: 0.45,
-  intro: true,
+  intro: false,
   onItemClick: () => {
     closeMenu();
   }
@@ -413,6 +413,7 @@ const pillNav = initPillNav("#primary-nav", {
 
 window.pillNav = pillNav;
 
+const heroTarget = { el: document.querySelector("#top"), index: -1 };
 const sectionTargets = [
   { id: "note", index: 0 },
   { id: "work", index: 1 },
@@ -422,17 +423,19 @@ const sectionTargets = [
   { id: "contact", index: 5 }
 ].map(item => ({ el: document.querySelector(`#${item.id}`), index: item.index })).filter(item => Boolean(item.el));
 
+const allTargets = [heroTarget, ...sectionTargets].filter(t => Boolean(t.el));
+
 if ("IntersectionObserver" in window) {
   const sectionObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
-      const match = sectionTargets.find(t => t.el === entry.target);
+      const match = allTargets.find(t => t.el === entry.target);
       if (match && pillNav) {
         pillNav.setActive(match.index, true);
       }
     });
   }, { rootMargin: "-25% 0px -55% 0px", threshold: 0 });
-  sectionTargets.forEach((target) => sectionObserver.observe(target.el));
+  allTargets.forEach((target) => sectionObserver.observe(target.el));
 }
 
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
@@ -445,12 +448,18 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     closeMenu();
     target.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
     window.history.pushState(null, "", href);
+    if (href === "#top") {
+      pillNav?.setActive(-1, true);
+    }
   });
 });
 
 window.addEventListener("popstate", () => {
   const hash = window.location.hash;
-  if (!hash) return;
+  if (!hash || hash === "#top") {
+    pillNav?.setActive(-1, true);
+    return;
+  }
   const match = sectionTargets.find(t => `#${t.el.id}` === hash);
   if (match && pillNav) {
     pillNav.setActive(match.index, true);
@@ -458,11 +467,13 @@ window.addEventListener("popstate", () => {
   }
 });
 
-if (window.location.hash) {
+if (window.location.hash && window.location.hash !== "#top") {
   const match = sectionTargets.find(t => `#${t.el.id}` === window.location.hash);
   if (match && pillNav) {
     pillNav.setActive(match.index, false);
   }
+} else {
+  pillNav?.setActive(-1, false);
 }
 
 requestAnimationFrame(() => document.body.classList.add("is-ready"));
@@ -559,11 +570,14 @@ function initLuminousType() {
 
 initLuminousType();
 
-/* --- React Bits: FoldText Engine (Plays once on mount/load for Hero Title) --- */
+/* --- React Bits: FoldText Engine (Hover-Triggered for Hero Title) --- */
 const heroFold = initFoldText("#hero-title", {
   hinge: "top",
-  duration: 0.75,
-  stagger: 0.026,
+  trigger: "hover",
+  duration: 0.72,
+  foldDuration: 0.22,
+  unfoldDuration: 0.52,
+  stagger: 0.022,
   staggerFrom: "start",
   foldAngle: 90,
   ease: "power3.out",

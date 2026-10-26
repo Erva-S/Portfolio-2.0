@@ -16,33 +16,38 @@ export function initFoldText(target, options = {}) {
 
   const {
     hinge = 'top',
-    duration = 0.75,
-    stagger = 0.026,
+    duration = 0.72,
+    foldDuration = 0.22,
+    unfoldDuration = 0.52,
+    stagger = 0.022,
     staggerFrom = 'start',
     foldAngle = 90,
     ease = 'power3.out',
     perspective = 900,
-    creaseShading = 0.42
+    creaseShading = 0.42,
+    trigger = 'hover'
   } = options;
 
   const elements = Array.from(root.querySelectorAll('.fold-text-piece'));
   if (!elements.length) return null;
 
-  const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  const reduceMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
   const safeHinge = HINGES[hinge] ? hinge : 'top';
   const { axis, sign, origin } = HINGES[safeHinge];
-  const unfoldEase = gsap.parseEase(reduceMotion ? 'power1.out' : ease) || gsap.parseEase('power3.out');
-  const angle = reduceMotion ? 0 : clamp(foldAngle, 0, 180);
-  const crease = reduceMotion ? 0 : clamp(creaseShading, 0, 1);
-  const unfoldDuration = reduceMotion ? 0 : duration;
-  const staggerVars = { each: reduceMotion ? 0 : stagger, from: staggerFrom };
+  const unfoldEase = gsap.parseEase(ease) || gsap.parseEase('power3.out');
+  const angle = clamp(foldAngle, 0, 180);
+  const crease = clamp(creaseShading, 0, 1);
 
   root.style.setProperty('--fold-perspective', `${Math.max(120, perspective)}px`);
 
+  // Pieces initialized at resting state: completely unfolded, flat, fully readable
   const pieces = elements.map(element => {
     element.style.transformOrigin = origin;
     element.style.backfaceVisibility = 'hidden';
-    return { element, t: 0 };
+    element.style.transform = 'none';
+    element.style.opacity = '1';
+    element.style.setProperty('--fold-crease', '0');
+    return { element, t: 1 };
   });
 
   const shade = progress => String(crease * clamp(1 - progress, 0, 1));
@@ -58,36 +63,114 @@ export function initFoldText(target, options = {}) {
   };
 
   let timeline = null;
+  let isAnimating = false;
 
-  const play = () => {
-    timeline?.kill();
-    timeline = gsap.timeline({ onUpdate: render });
-    timeline.fromTo(
-      pieces,
-      { t: 0 },
-      { t: 1, duration: unfoldDuration, ease: 'none', stagger: staggerVars }
-    );
-    render();
-  };
-
-  if (reduceMotion) {
+  const resetToRest = () => {
     pieces.forEach(piece => {
       piece.t = 1;
       piece.element.style.transform = 'none';
       piece.element.style.opacity = '1';
       piece.element.style.setProperty('--fold-crease', '0');
     });
+  };
+
+  const playHoverEffect = () => {
+    if (reduceMotion()) {
+      resetToRest();
+      return;
+    }
+
+    // Prevent repeated re-triggering from tiny mouse movements while animating
+    if (isAnimating) return;
+
+    // Do not disrupt active text selection
+    const sel = window.getSelection();
+    if (sel && sel.toString().trim().length > 0) return;
+
+    isAnimating = true;
+    timeline?.kill();
+    timeline = gsap.timeline({
+      onUpdate: render,
+      onComplete: () => {
+        isAnimating = false;
+        resetToRest();
+      }
+    });
+
+    const orderedPieces = staggerFrom === 'end' ? [...pieces].reverse() : pieces;
+
+    orderedPieces.forEach((piece, index) => {
+      const delay = index * stagger;
+
+      // Phase 1: Crisp paper fold along hinge
+      timeline.to(
+        piece,
+        {
+          t: 0,
+          duration: foldDuration,
+          ease: 'power2.in'
+        },
+        delay
+      );
+
+      // Phase 2: Smooth unfolding back to flat resting state
+      timeline.to(
+        piece,
+        {
+          t: 1,
+          duration: unfoldDuration,
+          ease: unfoldEase
+        },
+        delay + foldDuration
+      );
+    });
+  };
+
+  // Attach hover and keyboard focus listeners
+  const onPointerEnter = (e) => {
+    if (e.pointerType === 'touch') return;
+    playHoverEffect();
+  };
+
+  const onFocusIn = () => {
+    playHoverEffect();
+  };
+
+  const onPointerLeave = () => {
+    // When pointer leaves, ensure text finishes gracefully to resting state
+    // We let the timeline finish so text unfolds completely to rest
+  };
+
+  const onFocusOut = () => {
+    if (!isAnimating) {
+      resetToRest();
+    }
+  };
+
+  if (trigger === 'hover') {
+    root.addEventListener('pointerenter', onPointerEnter, { passive: true });
+    root.addEventListener('focusin', onFocusIn, { passive: true });
+    root.addEventListener('pointerleave', onPointerLeave, { passive: true });
+    root.addEventListener('focusout', onFocusOut, { passive: true });
   } else {
-    // Set initial folded state immediately so there is no flash
-    render();
-    play();
+    // If trigger is 'mount', play once
+    playHoverEffect();
   }
 
+  // Ensure resting state on load/refresh
+  resetToRest();
+
   return {
-    play,
+    play: playHoverEffect,
+    reset: resetToRest,
     destroy: () => {
       timeline?.kill();
       gsap.killTweensOf(pieces);
+      root.removeEventListener('pointerenter', onPointerEnter);
+      root.removeEventListener('focusin', onFocusIn);
+      root.removeEventListener('pointerleave', onPointerLeave);
+      root.removeEventListener('focusout', onFocusOut);
+      resetToRest();
     }
   };
 }

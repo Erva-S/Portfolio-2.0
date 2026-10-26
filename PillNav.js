@@ -21,7 +21,7 @@ export function initPillNav(container, options = {}) {
       { label: 'Build', href: '#work-with-me' },
       { label: 'Contact', href: '#contact' }
     ],
-    defaultActiveIndex = 0,
+    defaultActiveIndex = -1,
     hoverEffect = 'fill', // 'fill' (rolling label + circle fill) or 'glide' (gliding pill follows hover)
     indicator = 'pill',   // 'pill' (gliding pill on active) or 'dot' (gold sliding dot)
     bounce = 0.35,
@@ -30,7 +30,9 @@ export function initPillNav(container, options = {}) {
     onItemClick
   } = options;
 
-  let activeIndex = clamp(defaultActiveIndex, 0, items.length - 1);
+  let activeIndex = (defaultActiveIndex === null || defaultActiveIndex === undefined || defaultActiveIndex < 0)
+    ? -1
+    : clamp(defaultActiveIndex, 0, items.length - 1);
   let open = false;
 
   const bar = root.querySelector('.pill-nav__bar');
@@ -92,7 +94,7 @@ export function initPillNav(container, options = {}) {
 
   const syncClasses = () => {
     slotElements.forEach((slot, index) => {
-      const isCurrentActive = index === activeIndex;
+      const isCurrentActive = activeIndex >= 0 && index === activeIndex;
       const isHovered = state.hover === index;
       slot.toggleAttribute('data-lit', isHovered);
       slot.toggleAttribute('data-hover', isHovered && hoverEffect === 'fill');
@@ -112,7 +114,7 @@ export function initPillNav(container, options = {}) {
     if (panel) {
       const rows = Array.from(panel.querySelectorAll('.pill-nav__row'));
       rows.forEach((row, idx) => {
-        if (idx === activeIndex) row.setAttribute('aria-current', 'page');
+        if (activeIndex >= 0 && idx === activeIndex) row.setAttribute('aria-current', 'page');
         else row.removeAttribute('aria-current');
       });
     }
@@ -218,7 +220,7 @@ export function initPillNav(container, options = {}) {
     if (Math.abs(state.press - pressTarget) > 0.0005 || Math.abs(state.pressVelocity) > 0.01) busy = true;
 
     // Dot spring indicator
-    const dotTarget = rects[activeIndex];
+    const dotTarget = activeIndex >= 0 ? rects[activeIndex] : null;
     if (dotTarget && !state.waiting) {
       const center = dotTarget.left + dotTarget.width / 2;
       if (state.dotAlpha < 0.02) {
@@ -409,8 +411,9 @@ export function initPillNav(container, options = {}) {
   wake();
 
   function setActive(index, animate = true) {
-    if (index === activeIndex && state.alpha > 0.8) return;
-    activeIndex = clamp(index, 0, items.length - 1);
+    const nextIndex = (index === null || index === undefined || index < 0) ? -1 : clamp(index, 0, items.length - 1);
+    if (nextIndex === activeIndex && (nextIndex >= 0 ? state.alpha > 0.8 : state.alpha < 0.05)) return;
+    activeIndex = nextIndex;
     state.sliding = animate && !reduce;
     syncClasses();
     wake();
