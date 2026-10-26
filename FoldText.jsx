@@ -22,7 +22,7 @@ const FOLD_STYLES = ['paper', 'blinds', 'flip'];
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
 const FoldText = ({
-  text = 'a work in progress.',
+  text = 'building my way up.',
   splitBy = 'char',
   hinge = 'top',
   foldStyle = 'paper',

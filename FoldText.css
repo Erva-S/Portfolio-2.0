@@ -20,7 +20,7 @@
 }
 
 .fold-text-visual {
-  display: block;
+  display: inline-block;
   user-select: text;
   -webkit-user-select: text;
 }

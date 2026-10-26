@@ -30,6 +30,7 @@ export function initFoldText(target, options = {}) {
 
   const elements = Array.from(root.querySelectorAll('.fold-text-piece'));
   if (!elements.length) return null;
+  const interactionRoot = root.querySelector('.fold-text-visual') || root;
 
   const reduceMotion = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
   const safeHinge = HINGES[hinge] ? hinge : 'top';
@@ -64,6 +65,7 @@ export function initFoldText(target, options = {}) {
 
   let timeline = null;
   let isAnimating = false;
+  let isPointerInside = false;
 
   const resetToRest = () => {
     pieces.forEach(piece => {
@@ -80,15 +82,13 @@ export function initFoldText(target, options = {}) {
       return;
     }
 
-    // Prevent repeated re-triggering from tiny mouse movements while animating
-    if (isAnimating) return;
-
     // Do not disrupt active text selection
     const sel = window.getSelection();
     if (sel && sel.toString().trim().length > 0) return;
 
-    isAnimating = true;
     timeline?.kill();
+    resetToRest();
+    isAnimating = true;
     timeline = gsap.timeline({
       onUpdate: render,
       onComplete: () => {
@@ -129,6 +129,7 @@ export function initFoldText(target, options = {}) {
   // Attach hover and keyboard focus listeners
   const onPointerEnter = (e) => {
     if (e.pointerType === 'touch') return;
+    isPointerInside = true;
     playHoverEffect();
   };
 
@@ -137,20 +138,24 @@ export function initFoldText(target, options = {}) {
   };
 
   const onPointerLeave = () => {
-    // When pointer leaves, ensure text finishes gracefully to resting state
-    // We let the timeline finish so text unfolds completely to rest
+    isPointerInside = false;
+    timeline?.kill();
+    isAnimating = false;
+    resetToRest();
   };
 
   const onFocusOut = () => {
-    if (!isAnimating) {
+    if (!isPointerInside) {
+      timeline?.kill();
+      isAnimating = false;
       resetToRest();
     }
   };
 
   if (trigger === 'hover') {
-    root.addEventListener('pointerenter', onPointerEnter, { passive: true });
+    interactionRoot.addEventListener('pointerenter', onPointerEnter, { passive: true });
     root.addEventListener('focusin', onFocusIn, { passive: true });
-    root.addEventListener('pointerleave', onPointerLeave, { passive: true });
+    interactionRoot.addEventListener('pointerleave', onPointerLeave, { passive: true });
     root.addEventListener('focusout', onFocusOut, { passive: true });
   } else {
     // If trigger is 'mount', play once
@@ -166,9 +171,9 @@ export function initFoldText(target, options = {}) {
     destroy: () => {
       timeline?.kill();
       gsap.killTweensOf(pieces);
-      root.removeEventListener('pointerenter', onPointerEnter);
+      interactionRoot.removeEventListener('pointerenter', onPointerEnter);
       root.removeEventListener('focusin', onFocusIn);
-      root.removeEventListener('pointerleave', onPointerLeave);
+      interactionRoot.removeEventListener('pointerleave', onPointerLeave);
       root.removeEventListener('focusout', onFocusOut);
       resetToRest();
     }
