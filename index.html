@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#FAF8F3" />
     <meta name="description" content="Erva Savaliya — a CSE student and creative developer building thoughtful interfaces, web applications, and technical experiments." />
-    <meta property="og:title" content="Erva Savaliya — I think. I experiment. I build." />
+    <meta property="og:title" content="Erva Savaliya — Ideas worth building." />
     <meta property="og:description" content="A living portfolio of real projects, technical experiments, and work in progress by Erva Savaliya." />
     <meta property="og:type" content="website" />
-    <title>Erva Savaliya — I think. I experiment. I build.</title>
+    <title>Erva Savaliya — Ideas worth building.</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,13 +28,40 @@
             <span class="luminous-light" aria-hidden="true">Erva Savaliya</span>
           </span>
         </a>
-        <nav class="primary-nav" id="primary-nav" aria-label="Primary navigation">
-          <a href="#work" data-nav-link>Work</a>
-          <a href="#work-with-me" data-nav-link>Work with me</a>
-          <a href="#about" data-nav-link>About</a>
-          <a href="#contact" data-nav-link>Contact</a>
-          <a href="https://www.linkedin.com/in/erva-savaliya-4b945a378/" target="_blank" rel="noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
-          <a href="https://github.com/Erva-S" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+        <nav class="gooey-nav gooey-nav--md gooey-nav--framed primary-nav" id="primary-nav" aria-label="Primary navigation">
+          <span class="gooey-nav__rim"></span>
+          <div class="gooey-nav__stage">
+            <canvas class="gooey-nav__canvas" aria-hidden="true"></canvas>
+            <span class="gooey-nav__fallback" aria-hidden="true"></span>
+            <ul class="gooey-nav__list">
+              <li class="gooey-nav__item" data-gooey-index="0" data-active="">
+                <a href="#work" class="gooey-nav__link" aria-current="page" data-nav-link>
+                  <span class="gooey-nav__label">Work</span>
+                </a>
+              </li>
+              <li class="gooey-nav__item" data-gooey-index="1">
+                <a href="#work-with-me" class="gooey-nav__link" data-nav-link>
+                  <span class="gooey-nav__label">Work with me</span>
+                </a>
+              </li>
+              <li class="gooey-nav__item" data-gooey-index="2">
+                <a href="#about" class="gooey-nav__link" data-nav-link>
+                  <span class="gooey-nav__label">About</span>
+                </a>
+              </li>
+              <li class="gooey-nav__item" data-gooey-index="3">
+                <a href="#contact" class="gooey-nav__link" data-nav-link>
+                  <span class="gooey-nav__label">Contact</span>
+                </a>
+              </li>
+            </ul>
+            <ul class="gooey-nav__list gooey-nav__list--active" aria-hidden="true">
+              <li class="gooey-nav__item"><span class="gooey-nav__link"><span class="gooey-nav__label">Work</span></span></li>
+              <li class="gooey-nav__item"><span class="gooey-nav__link"><span class="gooey-nav__label">Work with me</span></span></li>
+              <li class="gooey-nav__item"><span class="gooey-nav__link"><span class="gooey-nav__label">About</span></span></li>
+              <li class="gooey-nav__item"><span class="gooey-nav__link"><span class="gooey-nav__label">Contact</span></span></li>
+            </ul>
+          </div>
         </nav>
         <button class="menu-toggle" type="button" aria-controls="primary-nav" aria-expanded="false" aria-label="Open navigation"><span></span><span></span></button>
       </div>
@@ -42,36 +69,30 @@
 
     <main id="main">
       <section class="hero" id="top" aria-labelledby="hero-title">
-        <div class="hero-meta hero-meta--top"><span>01 — Introduction</span><span>CSE Student · Freelance Web Developer</span></div>
+        <div class="hero-meta hero-meta--top">
+          <span>01 — Introduction</span>
+          <span class="availability-tag"><span class="availability-dot" aria-hidden="true"></span>Open to web development projects</span>
+        </div>
         <div class="hero-main">
           <div class="hero-heading-wrap">
-            <p class="hero-kicker reveal reveal--fade">Erva Savaliya · CSPIT, CHARUSAT</p>
-            <h1 class="hero-title" id="hero-title" aria-label="I think. I experiment. I build.">
-              <span class="hero-line hero-line--one"><span>I think.</span></span>
-              <span class="hero-line hero-line--two"><span>I <em>experiment.</em></span></span>
-              <span class="hero-line hero-line--three"><span>I build<span class="hero-dot">.</span></span></span>
+            <p class="hero-kicker reveal reveal--fade"><span class="hero-kicker-name">Erva Savaliya</span> <span class="hero-kicker-sep">·</span> CSPIT, CHARUSAT</p>
+            <h1 class="hero-title cipher-reveal" id="hero-title" aria-label="Ideas worth building.">
+              <span class="hero-line hero-line--one"><span><span class="cipher-word"><span class="cipher-char" data-orig="I">I</span><span class="cipher-char" data-orig="d">d</span><span class="cipher-char" data-orig="e">e</span><span class="cipher-char" data-orig="a">a</span><span class="cipher-char" data-orig="s">s</span></span> <span class="cipher-word"><span class="cipher-char" data-orig="w">w</span><span class="cipher-char" data-orig="o">o</span><span class="cipher-char" data-orig="r">r</span><span class="cipher-char" data-orig="t">t</span><span class="cipher-char" data-orig="h">h</span></span></span></span>
+              <span class="hero-line hero-line--two"><span><em><span class="cipher-word"><span class="cipher-char" data-orig="b">b</span><span class="cipher-char" data-orig="u">u</span><span class="cipher-char" data-orig="i">i</span><span class="cipher-char" data-orig="l">l</span><span class="cipher-char" data-orig="d">d</span><span class="cipher-char" data-orig="i">i</span><span class="cipher-char" data-orig="n">n</span><span class="cipher-char" data-orig="g">g</span><span class="cipher-char hero-dot" data-orig=".">.</span></span></em></span></span>
             </h1>
           </div>
           <div class="hero-support reveal reveal--rise">
-            <!--
-              INTRO COPY ALTERNATIVES (switch as desired):
-              1. Freelance & Web Development (active):
-                 "Second-year CSE student and freelance web developer crafting clean, performant websites and modern web applications. Available for freelance client projects, landing pages, and frontend collaborations."
-              2. Direct / High-Impact Freelance:
-                 "Freelance web developer and second-year CSE student building responsive, high-impact web experiences. Focused on clean design, fast load times, and turning ideas into polished production websites."
-              3. Warm / Collaborative:
-                 "I build modern websites and web applications for clients and curious teams. Currently pursuing CSE at Charusat while taking on freelance web projects with a focus on craft and clarity."
-              4. Minimal / Precision:
-                 "Second-year CSE student and freelance web developer. Building performant websites, bespoke frontend interfaces, and web applications available for client hire."
-            -->
-            <p>Second-year CSE student and freelance web developer crafting clean, performant websites and modern web applications. Available for freelance client projects, landing pages, and frontend collaborations.</p>
+            <p>I'm Erva, a CSE student and web developer who turns ideas into thoughtful websites and useful web applications. Open to freelance projects and collaborations, I enjoy building digital experiences that look great and work smoothly.</p>
             <div class="hero-actions">
-              <a class="button button--dark" href="#work" aria-label="Explore selected work"><span>Explore selected work</span><span class="button-arrow" aria-hidden="true">↘</span></a>
+              <a class="button button--dark" href="#work" aria-label="Proof of work"><span>Proof of work</span><span class="button-arrow" aria-hidden="true">↘</span></a>
               <a class="text-link" href="#contact" aria-label="Start a conversation with Erva">Start a conversation <span aria-hidden="true">↗</span></a>
             </div>
           </div>
         </div>
-        <div class="hero-meta hero-meta--bottom"><span>Frontend architecture · Modern web development · Available for freelance</span><a class="scroll-cue" href="#work" aria-label="Scroll to explore selected projects"><span>Scroll to explore</span><span class="scroll-cue-line" aria-hidden="true"></span></a><span>CSPIT, Charusat <b>·</b> Gujarat, India</span></div>
+        <div class="hero-meta hero-meta--bottom">
+          <span>CSE Student · Web Developer · Open to Freelance Projects</span>
+          <span>ACADEMICALLY BUSY. PROFESSIONALLY AVAILABLE.</span>
+        </div>
       </section>
 
       <section class="statement section-pad" aria-labelledby="statement-title">

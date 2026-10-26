@@ -1,4 +1,5 @@
 import { Forminit } from "forminit";
+import { initGooeyNav } from "./GooeyNav.js";
 
 const doc = document.documentElement;
 doc.classList.add("js");
@@ -384,15 +385,51 @@ if ("IntersectionObserver" in window && !reducedMotion) {
   revealItems.forEach((item) => item.classList.add("is-visible"));
 }
 
-const sectionTargets = [document.querySelector("#work"), document.querySelector("#about"), document.querySelector("#contact")].filter(Boolean);
+/* --- React Bits: GooeyNav Navigation Integration --- */
+const gooeyNav = initGooeyNav("#primary-nav", {
+  items: [
+    { label: "Work", href: "#work" },
+    { label: "Work with me", href: "#work-with-me" },
+    { label: "About", href: "#about" },
+    { label: "Contact", href: "#contact" }
+  ],
+  initialActiveIndex: 0,
+  theme: "light",
+  color: "#2a2219",
+  activeTextColor: "#faf8f3",
+  colors: ["#2a2219", "#d4a574"],
+  size: "md",
+  frame: true,
+  animationTime: 600,
+  particleCount: 15,
+  spread: 56,
+  timeVariance: 300,
+  gooeyness: 0.5,
+  wobble: 0.5,
+  hoverEffect: true,
+  onChange: () => {
+    closeMenu();
+  }
+});
+
+const sectionTargets = [
+  { id: "work", index: 0 },
+  { id: "work-with-me", index: 1 },
+  { id: "about", index: 2 },
+  { id: "contact", index: 3 }
+].map(item => ({ el: document.querySelector(`#${item.id}`), index: item.index })).filter(item => Boolean(item.el));
+
 if ("IntersectionObserver" in window) {
   const sectionObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
-      navLinks.forEach((link) => link.classList.toggle("is-active", link.getAttribute("href") === `#${entry.target.id}`));
+      const match = sectionTargets.find(t => t.el === entry.target);
+      if (match && gooeyNav) {
+        gooeyNav.setActive(match.index, true);
+      }
     });
-  }, { rootMargin: "-35% 0px -55% 0px", threshold: 0 });
-  sectionTargets.forEach((section) => sectionObserver.observe(section));
+  }, { rootMargin: "-30% 0px -55% 0px", threshold: 0 });
+  sectionTargets.forEach((target) => sectionObserver.observe(target.el));
 }
 
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
@@ -400,6 +437,7 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
     const target = document.querySelector(anchor.getAttribute("href"));
     if (!target) return;
     event.preventDefault();
+    closeMenu();
     target.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
     window.history.replaceState(null, "", anchor.getAttribute("href"));
   });
@@ -498,3 +536,114 @@ function initLuminousType() {
 }
 
 initLuminousType();
+
+/* --- React Bits Pro: Cipher Reveal Engine (Hover Only for Hero Title) --- */
+function initCipherReveal() {
+  const title = document.querySelector(".hero-title.cipher-reveal");
+  if (!title) return;
+
+  const chars = Array.from(title.querySelectorAll(".cipher-char"));
+  if (!chars.length) return;
+
+  const CIPHER_GLYPHS = "0123456789ABCDEF!#$&*+-/<>?@[]~";
+  let isAnimating = false;
+  let animId = null;
+
+  function cancelAndRestore() {
+    if (animId) {
+      cancelAnimationFrame(animId);
+      animId = null;
+    }
+    if (!isAnimating && !title.classList.contains("is-cipher-active")) {
+      return;
+    }
+    isAnimating = false;
+    title.classList.remove("is-cipher-active");
+    chars.forEach((c) => {
+      if (c.textContent !== c.dataset.orig) {
+        c.textContent = c.dataset.orig;
+      }
+      c.classList.remove("is-scrambling");
+      c.style.width = "";
+      c.style.textAlign = "";
+    });
+  }
+
+  function triggerCipher() {
+    if (isAnimating) return;
+    const sel = window.getSelection();
+    if (sel && sel.toString().trim().length > 0) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    isAnimating = true;
+    title.classList.add("is-cipher-active");
+
+    // Lock widths dynamically at current rendered size so scrambling never shifts layout
+    const originalWidths = chars.map((c) => {
+      const rect = c.getBoundingClientRect();
+      return rect.width > 0 ? rect.width : null;
+    });
+
+    chars.forEach((c, i) => {
+      if (originalWidths[i]) {
+        c.style.width = `${originalWidths[i].toFixed(2)}px`;
+        c.style.textAlign = "center";
+      }
+      c.classList.add("is-scrambling");
+    });
+
+    const startTime = performance.now();
+    let lastGlyphUpdate = startTime;
+    const charDelay = 26; // progressive cascade delay per character
+    const baseDuration = 140; // minimum initial scramble duration
+
+    function update(now) {
+      const currentSel = window.getSelection();
+      if (currentSel && currentSel.toString().trim().length > 0) {
+        cancelAndRestore();
+        return;
+      }
+
+      const elapsed = now - startTime;
+      const shouldUpdateGlyphs = (now - lastGlyphUpdate) > 36;
+      if (shouldUpdateGlyphs) {
+        lastGlyphUpdate = now;
+      }
+
+      let allResolved = true;
+
+      chars.forEach((c, i) => {
+        const resolveTime = baseDuration + (i * charDelay);
+
+        if (elapsed < resolveTime) {
+          allResolved = false;
+          if (shouldUpdateGlyphs) {
+            const rand = CIPHER_GLYPHS[Math.floor(Math.random() * CIPHER_GLYPHS.length)];
+            c.textContent = rand;
+          }
+        } else {
+          if (c.textContent !== c.dataset.orig) {
+            c.textContent = c.dataset.orig;
+            c.classList.remove("is-scrambling");
+          }
+        }
+      });
+
+      if (!allResolved) {
+        animId = requestAnimationFrame(update);
+      } else {
+        cancelAndRestore();
+      }
+    }
+
+    animId = requestAnimationFrame(update);
+  }
+
+  title.addEventListener("pointerenter", triggerCipher, { passive: true });
+  title.addEventListener("pointerdown", cancelAndRestore, { passive: true });
+  title.addEventListener("mousedown", cancelAndRestore, { passive: true });
+  title.addEventListener("selectstart", cancelAndRestore, { passive: true });
+}
+
+initCipherReveal();
+
