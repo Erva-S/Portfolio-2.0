@@ -38,7 +38,7 @@ const THEMES = {
 
 const DEFAULT_ITEMS = [
   { label: 'Note', href: '#note' },
-  { label: 'Work', href: '#work' },
+  { label: 'Workbench', href: '#workbench' },
   { label: 'About', href: '#about' },
   { label: 'Proof', href: '#proof' },
   { label: 'Build', href: '#work-with-me' },

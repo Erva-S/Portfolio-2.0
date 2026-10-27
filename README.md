@@ -53,23 +53,24 @@ The project is pinned to Vite `4.5.14` to avoid the Rollup native-binding issue 
 ## Structure
 
 - `index.html` — page structure, content, metadata, and verified project links.
-- `styles.css` — design tokens, responsive layouts, typographic project index, detail dialog, visual studies, and motion styles.
-- `script.js` — navigation, project preview selection, URL/hash history, accessible project detail views, scroll progress, reveal choreography, and reduced-motion handling.
+- `styles.css` — design tokens, responsive layouts, typographic project index, authentic preview states, detail dialog, and motion styles.
+- `script.js` — navigation, featured project selection, authentic preview rendering, URL/hash history, accessible project detail views, scroll progress, reveal choreography, and reduced-motion handling.
 - `favicon.svg` — minimal ES monogram favicon.
 - `.env.example` — placeholder for the public form-delivery endpoint.
 
 ## Content notes
 
-The project links currently point to public GitHub repositories under `Erva-S`:
+The Workbench currently features these projects, in order, from the `projects` registry inside `script.js`:
 
-- `odoo-LDCE` / Aethera travel workspace
-- `dns-cache-analysis`
-- `CyberKavach_task_Erva`
-- `Cpp_Project` / Smart Study Planner
+- Shreedutta Clinic
+- Revora AI Meeting Assistant
+- Adhira — SIH Project
+- Adhira — Travel Companion
+- Aethera — Travel Platform
 
-The project index uses CSS-built visual studies because the current portfolio directory does not contain authenticated project screenshots or image assets. These previews are intentionally presented as visual studies, not as screenshots of the applications. Replace or supplement them with real project captures when they are available.
+Authentic preview assets are stored in `assets/previews/`. Shreedutta Clinic uses a capture from its verified deployment; the supplied Aethera, Revora, Adhira SIH, and Adhira travel screenshots are used for the corresponding project previews. Only the verified Shreedutta deployment and public Aethera repository are exposed as project destinations.
 
-Selecting a project updates the preview. Clicking or pressing Enter opens an accessible project detail dialog with a URL hash such as `#project/dns`, so browser back/forward navigation works. On mobile, the same list works through tap selection.
+Selecting a project updates the preview. Clicking or pressing Enter opens an accessible project detail dialog with a URL hash such as `#project/revora`, so browser back/forward navigation works. On mobile, the same list works through tap selection.
 
 ## Before publishing
 

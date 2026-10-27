@@ -11,18 +11,18 @@ const progress = document.querySelector(".scroll-progress");
 const menuToggle = document.querySelector(".pill-nav__toggle");
 const primaryNav = document.querySelector(".primary-nav");
 const navLinks = [...document.querySelectorAll("[data-nav-link]")];
-const projectButtons = [...document.querySelectorAll("[data-project-id]")];
+let projectButtons = [];
+const featuredProjectList = document.querySelector("#featured-project-list");
 const dialog = document.querySelector("#project-dialog");
 const preview = document.querySelector("#project-preview");
 const stageTitle = document.querySelector("#stage-title");
 const stageCategory = document.querySelector("#stage-category");
-const stageStatus = document.querySelector("#stage-status");
-const stageOpen = document.querySelector("[data-open-project]");
+const stageActions = document.querySelector("#stage-actions");
+const detailActions = document.querySelector("#detail-actions");
 const inquiryForm = document.querySelector("#inquiry-form");
 const formStatus = document.querySelector("#form-status");
 const inquiryProject = document.querySelector("#inquiry-project");
 const inquiryContext = document.querySelector("#inquiry-context");
-const dialogInquiry = document.querySelector("[data-inquiry-project]");
 
 // Forminit form: inputs are named fi-{type}-{name}. Rules: https://forminit.com/setup.md
 const FORMINIT_FORM_ID = "jn7g4p33910";
@@ -42,7 +42,7 @@ let forminitInstance;
 let isSendingForm = false;
 const formStartedAt = Date.now();
 const lastProjectFocus = { element: null };
-let activeProjectId = "aethera";
+let activeProjectId = "shreedutta";
 let closingFromHistory = false;
 let pillNav = null;
 let currentActiveIndex = -1;
@@ -51,71 +51,127 @@ let navigationHasStarted = false;
 let initialScrollY = window.scrollY || document.documentElement.scrollTop || 0;
 let programmaticTargetIndex = null;
 let preserveInitialUnselected = window.location.hash === "#note";
+let lockedScrollY = 0;
+const bodyLockStyles = { position: "", top: "", width: "", overflow: "" };
+let previousScrollBehavior = "";
+let previousHistoryScrollRestoration = "auto";
 
 const projects = {
-  aethera: {
+  shreedutta: {
     number: "01",
-    name: "Aethera",
-    category: "Travel workspace · live companion",
-    status: "Build in progress",
+    featured: true,
+    name: "Shreedutta Clinic",
+    meta: "MERN · clinic platform",
+    category: "Clinic management platform · deployed",
+    stack: "MongoDB · Express.js · React · Node.js · Tailwind CSS",
+    live: "https://shreeduttaclinic.com/",
+    summary: "A deployed MERN clinic platform for cardiology consultation, diagnostics, and appointment management.",
+    objective: "Give the clinic a clear public presence while supporting appointment workflows and role-based dashboards for clinic operations.",
+    contribution: "Built and deployed the responsive clinic website and its appointment-focused patient experience for a live client project.",
+    decisions: "The interface leads with essential care information, direct appointment access, and a calm responsive layout that keeps the clinic easy to navigate.",
+    result: "Deployed clinic website with appointment management and role-based clinic dashboards.",
+    preview: {
+      type: "image",
+      orientation: "landscape",
+      ratio: "standard",
+      src: "/assets/previews/shreedutta-clinic.png",
+      alt: "Shreedutta Clinic website homepage showing the clinic navigation, cardiology headline, and service imagery.",
+      source: "Captured from the verified Shreedutta Clinic deployment.",
+      note: "Authentic deployed website capture"
+    },
+  },
+  revora: {
+    number: "02",
+    featured: true,
+    name: "Revora AI Meeting Assistant",
+    meta: "AI · meetings · context",
+    category: "AI meeting assistant",
+    stack: "MeetingBaaS · ElevenLabs · Gemini",
+    summary: "An AI-powered meeting assistant that turns conversations into transcripts, summaries, action items, and durable project context.",
+    objective: "Capture meeting information and carry decisions, open tasks, and relevant context forward across project conversations.",
+    contribution: "The product combines Google Meet bot capture, MeetingBaaS recording and transcript workflows, ElevenLabs transcription, and Gemini-generated meeting follow-ups.",
+    decisions: "Project-based organization keeps past decisions, action items, and meeting context available instead of isolating every conversation as a one-off record.",
+    result: "No public repository or deployment is displayed; the project remains represented by its brief until an approved public destination or sanitized capture is available.",
+    preview: {
+      type: "image",
+      orientation: "landscape",
+      ratio: "wide",
+      src: "/assets/previews/revora-dashboard.png",
+      alt: "Revora AI Meeting Assistant interface showing transcription, meeting summaries, action items, and meeting tools.",
+      source: "Supplied Revora dashboard screenshot.",
+      note: "Authentic Revora interface capture"
+    },
+  },
+  adhiraSih: {
+    number: "03",
+    featured: true,
+    name: "Adhira — SIH Project",
+    meta: "Flutter · SIH 2026",
+    category: "Mobile scholarship platform · SIH",
+    stack: "Flutter · Dart · Firebase · Gemini",
+    summary: "A mobile scholarship platform that brings scheme discovery, guided applications, document readiness, tracking, and assistance into one student workflow.",
+    objective: "Reduce fragmentation in scholarship applications for Scheduled Tribe students through a guided mobile experience.",
+    contribution: "The application brings together scholarship discovery, document management, application tracking, notifications, and the JAGO assistant.",
+    decisions: "A staged application flow and project-specific guidance keep complex scholarship requirements understandable on a mobile device.",
+    result: "No public repository or deployment is displayed for this private project.",
+    preview: {
+      type: "image",
+      orientation: "portrait",
+      src: "/assets/previews/adhira-sih.png",
+      alt: "Adhira SIH mobile application splash screen for the Ministry of Tribal Affairs scholarship platform.",
+      source: "Supplied Adhira SIH mobile screenshot.",
+      note: "Authentic mobile interface capture"
+    },
+  },
+  adhiraTravel: {
+    number: "04",
+    featured: true,
+    name: "Adhira — Travel Companion",
+    meta: "Travel discovery · SERP hackathon",
+    category: "Travel companion · discovery",
+    stack: "SerpApi · travel discovery",
+    summary: "A travel companion that brings flights, stays, places, and destination discovery into one planning experience.",
+    objective: "Help travelers move from destination research to a more focused, useful trip-discovery workflow.",
+    contribution: "The project connects travel search and discovery capabilities around flights, stays, places, and destination imagery.",
+    decisions: "Search-led discovery keeps the experience practical: useful travel options and destination context stay close to the planning decision.",
+    result: "No public repository or deployment is displayed for this private project.",
+    preview: {
+      type: "image",
+      orientation: "landscape",
+      ratio: "wide",
+      src: "/assets/previews/adhira-travel.png",
+      alt: "Adhira travel companion interface showing destination discovery and journey planning.",
+      source: "Supplied Adhira travel platform screenshot.",
+      note: "Authentic travel interface capture"
+    },
+  },
+  aethera: {
+    number: "05",
+    featured: true,
+    name: "Aethera — Travel Platform",
+    meta: "React · travel platform",
+    category: "Travel platform · Odoo hackathon",
     stack: "React 18 · TypeScript · Vite · Tailwind CSS",
     repo: "https://github.com/Erva-S/odoo-LDCE",
-    summary: "A luxury travel workspace concept moving from dreaming and planning into an in-destination companion.",
-    objective: "Bring destination discovery, itinerary planning, budget context, and live journey support into one calm travel workspace.",
-    contribution: "The public project evidence documents a React/TypeScript/Vite application and its component architecture. Individual contribution details are not separately documented in the current portfolio evidence, so this case study keeps that boundary visible.",
-    decisions: "The documented direction uses editorial typography, a planning/live mode split, local persistence, destination data, and a staged planner flow rather than a single static landing page.",
-    result: "Work in progress. The repository contains extensive product documentation and a working application direction; no verified public deployment is claimed here.",
-    previewClass: "preview-theme-aethera",
-    preview: `<div class="preview-art preview-art--aethera"><div class="preview-aethera-sun"></div><div class="preview-aethera-words"><span>Go somewhere</span><strong>worth remembering.</strong></div><div class="preview-aethera-panel"><span>LIVE JOURNEY</span><b>Panaji, Goa</b><small>DAY 04 / 10</small></div><div class="preview-grid-lines"></div><span class="preview-stamp">AE / 01</span></div>`,
-  },
-  dns: {
-    number: "02",
-    name: "DNS Cache Analysis",
-    category: "Python · networks · experiment",
-    status: "Completed experiment",
-    stack: "Python · CSV · Matplotlib · Wireshark",
-    repo: "https://github.com/Erva-S/dns-cache-analysis",
-    summary: "A reproducible local simulator for cache hits, misses, TTL expiry, latency, and evidence-driven summaries.",
-    objective: "Study how DNS caching and TTL affect the latency of repeated lookups through a controlled, local experiment.",
-    contribution: "The repository documents a monotonic TTL cache, experiment workloads, CSV export, metric aggregation, visualizations, and unit tests. The project is described as an educational simulator, not a production resolver.",
-    decisions: "Synthetic `.test` records, short demonstration TTLs, a configured artificial upstream delay, and generated CSV/graph outputs keep the experiment repeatable without pretending to measure the public internet.",
-    result: "Completed educational experiment with documented run commands, generated evidence locations, and tests covering cache behavior and metrics.",
-    previewClass: "preview-theme-dns",
-    preview: `<div class="preview-art preview-art--dns"><div class="terminal-top"><span></span><span></span><span></span><b>dns-cache-analysis</b></div><div class="terminal-command"><span>&gt;</span> python main.py experiment</div><div class="terminal-metrics"><div><small>STATUS</small><strong>EXPIRED</strong></div><div><small>TTL</small><strong>0.5s</strong></div></div><div class="terminal-chart"><i style="height: 34%"></i><i style="height: 70%"></i><i style="height: 46%"></i><i style="height: 84%"></i><i style="height: 59%"></i><i style="height: 91%"></i><i style="height: 42%"></i></div><p class="terminal-log"><span>+</span> refreshed from synthetic upstream / csv written</p><span class="preview-stamp">DNS / 02</span></div>`,
-  },
-  cyberkavach: {
-    number: "03",
-    name: "CyberKavach",
-    category: "Club management system · scaffold",
-    status: "Initial scaffold",
-    stack: "PHP · MySQL · RBAC concepts",
-    repo: "https://github.com/Erva-S/CyberKavach_task_Erva",
-    summary: "A role-based platform concept for events, approval workflows, QR attendance, certificates, analytics, and collaboration.",
-    objective: "Create a unified space for a technical club to manage its people, events, approvals, attendance, and generated certificates.",
-    contribution: "The public README identifies an initial scaffold and planned modules including Router, Auth, RBAC, Audit, Approval, Events, Attendance, and Certificates. This portfolio does not claim those planned modules are complete.",
-    decisions: "The project is represented as systems exploration: role-aware access, event workflows, QR attendance, and auditability are the useful organizing ideas visible in the public project description.",
-    result: "Scaffold / planned work. The repository is useful evidence of the direction, but it is not presented as a finished production application.",
-    previewClass: "preview-theme-cyber",
-    preview: `<div class="preview-art preview-art--cyber"><aside><b>CK</b><span class="is-active"></span><span></span><span></span><span></span></aside><div class="cyber-board"><div class="cyber-board-top"><span>Club workspace</span><b>⌁</b></div><div class="cyber-board-stats"><div><small>ACCESS</small><strong>RBAC</strong></div><div><small>CHECK-IN</small><strong>QR</strong></div><div><small>FLOW</small><strong>WEB</strong></div></div><div class="cyber-board-list"><span><i></i> Approval workflow <b>PLANNED</b></span><span><i></i> Attendance <b>EXPLORING</b></span><span><i></i> Certificates <b>PLANNED</b></span></div></div><span class="preview-stamp">CK / 03</span></div>`,
-  },
-  planner: {
-    number: "04",
-    name: "Smart Study Planner",
-    category: "C++ · object-oriented programming · CLI",
-    status: "Completed academic project",
-    stack: "C++ · OOP · vectors · menu-driven CLI",
-    repo: "https://github.com/Erva-S/Cpp_Project",
-    summary: "A focused command-line application for managing study tasks, tracking sessions, and calculating a productivity score.",
-    objective: "Turn study tasks and sessions into a small, understandable productivity workflow using core object-oriented programming concepts.",
-    contribution: "The repository README documents add, view, delete, and completion flows for study tasks, study-session tracking, and focus-score generation in a menu-driven CLI.",
-    decisions: "A deliberately small command-line boundary keeps the project focused on OOP concepts, vectors, state changes, and a readable menu-driven interaction model.",
-    result: "Completed academic project with a documented compile command and a clear scope around task management, session tracking, and productivity metrics.",
-    previewClass: "preview-theme-planner",
-    preview: `<div class="preview-art preview-art--planner"><div class="planner-ring"><strong>CLI</strong><small>object-oriented build</small></div><div class="planner-ticket"><small>ACADEMIC BUILD</small><b>Study planner</b><span>tasks · sessions · productivity</span></div><div class="planner-strokes"><i></i><i></i><i></i><i></i></div><span class="preview-stamp">C++ / 04</span></div>`,
+    summary: "A travel platform that brings destination discovery, itinerary planning, and in-destination journey context into one workspace.",
+    objective: "Bring travel planning and live journey support together without losing the calm, editorial feel of the experience.",
+    contribution: "The public project evidence documents the React, TypeScript, and Vite application architecture and its travel-workspace direction.",
+    decisions: "A planning and live-mode split, destination context, local persistence, and a staged planner flow keep the product focused on the journey.",
+    result: "Public repository available; no verified public deployment is claimed here.",
+    preview: {
+      type: "image",
+      orientation: "landscape",
+      ratio: "video",
+      src: "/assets/previews/aethera-supplied.png",
+      alt: "Aethera travel platform dashboard showing the current journey workspace.",
+      source: "Supplied Aethera interface screenshot.",
+      note: "Authentic travel platform capture"
+    },
   },
 };
 
 const orderedProjectIds = Object.keys(projects);
+const featuredProjectIds = orderedProjectIds.filter((id) => projects[id].featured);
 
 function updateScrollChrome() {
   const scrollable = document.documentElement.scrollHeight - window.innerHeight;
@@ -126,6 +182,69 @@ function updateScrollChrome() {
   if (programmaticTargetIndex !== null && programmaticTargetReached()) finishProgrammaticNavigation();
   if (pillNav && navigationHasStarted) pillNav.replayActive(true);
   scheduleActiveSectionUpdate();
+}
+
+function renderPreview(target, project) {
+  const isDialog = target.id === "detail-art";
+  const baseClass = isDialog ? "dialog-art" : "project-preview";
+  const preview = project.preview;
+  const orientationClass = preview.orientation ? ` project-preview--${preview.orientation}` : "";
+  const ratioClass = preview.ratio ? ` project-preview--ratio-${preview.ratio}` : "";
+  target.className = `${baseClass} ${preview.type === "image" ? "project-preview--image" : "project-preview--fallback"}${orientationClass}${ratioClass}`;
+  target.setAttribute("aria-label", preview.alt || `${project.name} preview`);
+
+  if (preview.type === "image") {
+    target.innerHTML = `<figure class="project-preview-media"><img src="${preview.src}" alt="${preview.alt}" /><figcaption>${preview.note}</figcaption></figure>`;
+    const image = target.querySelector("img");
+    image.addEventListener("error", () => {
+      target.className = `${baseClass} project-preview--fallback`;
+      target.innerHTML = `<div class="project-preview-fallback"><span>Preview unavailable</span><strong>${preview.note}</strong><small>${project.name} is still represented by its repository and project brief.</small></div>`;
+    }, { once: true });
+    return;
+  }
+
+  target.innerHTML = `<div class="project-preview-fallback"><span>Preview unavailable</span><strong>${preview.note}</strong><small>${project.name} is still represented by its project brief until a safe authentic capture is available.</small></div>`;
+}
+
+function destinationLinks(project, className) {
+  const links = [];
+  if (project.live) links.push(`<a class="${className}" href="${project.live}" target="_blank" rel="noreferrer">Open Live Link</a>`);
+  if (project.repo) links.push(`<a class="${className}" href="${project.repo}" target="_blank" rel="noreferrer">View Repository</a>`);
+  return links;
+}
+
+function renderStageActions(project, id) {
+  stageActions.innerHTML = [
+    ...destinationLinks(project, "stage-destination"),
+    `<button class="stage-open" type="button" data-open-project="${id}">Open brief</button>`
+  ].join("");
+}
+
+function renderDetailActions(project, id) {
+  detailActions.innerHTML = [
+    ...destinationLinks(project, "detail-destination"),
+    `<button class="dialog-inquiry" type="button" data-inquiry-project="${id}">Discuss a similar project</button>`
+  ].join("");
+}
+
+function renderFeaturedProjects() {
+  if (!featuredProjectList) return;
+  featuredProjectList.innerHTML = featuredProjectIds.map((id) => {
+    const project = projects[id];
+    return `<button class="project-item" type="button" data-project-id="${id}" aria-pressed="false"><span class="project-index-number">${project.number}</span><span class="project-index-name">${project.name}</span><span class="project-index-meta">${project.meta}</span></button>`;
+  }).join("");
+  projectButtons = [...featuredProjectList.querySelectorAll("[data-project-id]")];
+  projectButtons.forEach((button, index) => {
+    button.addEventListener("mouseenter", () => selectProject(button.dataset.projectId));
+    button.addEventListener("focus", () => selectProject(button.dataset.projectId));
+    button.addEventListener("click", () => openProject(button.dataset.projectId));
+    button.addEventListener("keydown", (event) => {
+      if (!["ArrowDown", "ArrowUp"].includes(event.key)) return;
+      event.preventDefault();
+      const nextIndex = event.key === "ArrowDown" ? (index + 1) % projectButtons.length : (index - 1 + projectButtons.length) % projectButtons.length;
+      projectButtons[nextIndex].focus();
+    });
+  });
 }
 
 function closeMenu() {
@@ -140,7 +259,7 @@ function closeMenu() {
 
 function selectProject(id) {
   const project = projects[id];
-  if (!project) return;
+  if (!project?.featured) return;
 
   activeProjectId = id;
   projectButtons.forEach((button) => {
@@ -149,32 +268,22 @@ function selectProject(id) {
     button.setAttribute("aria-pressed", String(selected));
   });
 
-  preview.className = `project-preview ${project.previewClass}`;
-  preview.innerHTML = project.preview;
-  preview.setAttribute("aria-label", `${project.name} visual study preview`);
+  renderPreview(preview, project);
   stageTitle.textContent = project.name;
   stageCategory.textContent = project.category;
-  stageStatus.textContent = project.status;
-  stageOpen.dataset.openProject = id;
+  renderStageActions(project, id);
 }
 
 function detailFields(project) {
   document.querySelector("#detail-number").textContent = project.number;
-  document.querySelector("#detail-status").textContent = project.status;
   document.querySelector("#detail-title").textContent = project.name;
   document.querySelector("#detail-summary").textContent = project.summary;
   document.querySelector("#detail-objective").textContent = project.objective;
   document.querySelector("#detail-contribution").textContent = project.contribution;
   document.querySelector("#detail-decisions").textContent = `${project.decisions} Stack: ${project.stack}.`;
   document.querySelector("#detail-result").textContent = project.result;
-  document.querySelector("#detail-repo").href = project.repo;
-  document.querySelector("#detail-art").className = `dialog-art ${project.previewClass}`;
-  document.querySelector("#detail-art").innerHTML = project.preview;
-  dialogInquiry.dataset.inquiryProject = activeProjectId;
-
-  const liveLink = document.querySelector("#detail-live");
-  liveLink.hidden = !project.live;
-  if (project.live) liveLink.href = project.live;
+  renderPreview(document.querySelector("#detail-art"), project);
+  renderDetailActions(project, activeProjectId);
 }
 
 function setInquiryContext(id = "") {
@@ -268,12 +377,51 @@ async function submitInquiry(event) {
 
 function projectIdFromLocation() {
   const match = window.location.hash.match(/^#project\/(.+)$/);
-  return match && projects[match[1]] ? match[1] : null;
+  return match && projects[match[1]]?.featured ? match[1] : null;
+}
+
+function lockPageScroll() {
+  if (document.body.classList.contains("modal-open")) return;
+  lockedScrollY = window.scrollY;
+  bodyLockStyles.position = document.body.style.position;
+  bodyLockStyles.top = document.body.style.top;
+  bodyLockStyles.width = document.body.style.width;
+  bodyLockStyles.overflow = document.body.style.overflow;
+  previousScrollBehavior = doc.style.scrollBehavior;
+  previousHistoryScrollRestoration = window.history.scrollRestoration;
+  doc.style.scrollBehavior = "auto";
+  window.history.scrollRestoration = "manual";
+  document.body.style.position = "fixed";
+  document.body.style.top = `-${lockedScrollY}px`;
+  document.body.style.width = "100%";
+  document.body.style.overflow = "hidden";
+  document.body.classList.add("modal-open");
+}
+
+function unlockPageScroll() {
+  if (!document.body.classList.contains("modal-open")) return;
+  const restoreY = lockedScrollY;
+  document.body.classList.remove("modal-open");
+  document.body.style.position = bodyLockStyles.position;
+  document.body.style.top = bodyLockStyles.top;
+  document.body.style.width = bodyLockStyles.width;
+  document.body.style.overflow = bodyLockStyles.overflow;
+  const startedAt = performance.now();
+  const restore = () => {
+    window.scrollTo({ left: 0, top: restoreY, behavior: "auto" });
+    if (performance.now() - startedAt < 600) {
+      window.requestAnimationFrame(restore);
+      return;
+    }
+    doc.style.scrollBehavior = previousScrollBehavior;
+    window.history.scrollRestoration = previousHistoryScrollRestoration;
+  };
+  restore();
 }
 
 function openProject(id, { push = true, focus = true } = {}) {
   const project = projects[id];
-  if (!project) return;
+  if (!project?.featured) return;
 
   selectProject(id);
   detailFields(project);
@@ -283,16 +431,15 @@ function openProject(id, { push = true, focus = true } = {}) {
     window.history.pushState({ project: id }, "", `#project/${id}`);
   }
 
-  if (!dialog.open) dialog.showModal();
+  if (!dialog.open) {
+    lockPageScroll();
+    dialog.showModal();
+  }
   if (focus) document.querySelector(".dialog-close").focus();
 }
 
 function closeProject() {
   if (!dialog.open) return;
-  if (window.location.hash.startsWith("#project/") && window.history.state?.project) {
-    window.history.back();
-    return;
-  }
   if (window.location.hash.startsWith("#project/")) {
     window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
   }
@@ -314,9 +461,9 @@ function syncProjectFromLocation() {
 }
 
 function cycleProject(direction) {
-  const currentIndex = orderedProjectIds.indexOf(activeProjectId);
-  const nextIndex = (currentIndex + direction + orderedProjectIds.length) % orderedProjectIds.length;
-  openProject(orderedProjectIds[nextIndex]);
+  const currentIndex = featuredProjectIds.indexOf(activeProjectId);
+  const nextIndex = (currentIndex + direction + featuredProjectIds.length) % featuredProjectIds.length;
+  openProject(featuredProjectIds[nextIndex]);
 }
 
 window.addEventListener("scroll", updateScrollChrome, { passive: true });
@@ -340,31 +487,16 @@ document.addEventListener("click", (event) => {
   if (!primaryNav.contains(event.target) && !menuToggle.contains(event.target)) closeMenu();
 });
 
-projectButtons.forEach((button, index) => {
-  button.addEventListener("mouseenter", () => selectProject(button.dataset.projectId));
-  button.addEventListener("focus", () => selectProject(button.dataset.projectId));
-  button.addEventListener("click", () => openProject(button.dataset.projectId));
-  button.addEventListener("keydown", (event) => {
-    if (!['ArrowDown', 'ArrowUp'].includes(event.key)) return;
-    event.preventDefault();
-    const nextIndex = event.key === "ArrowDown" ? (index + 1) % projectButtons.length : (index - 1 + projectButtons.length) % projectButtons.length;
-    projectButtons[nextIndex].focus();
-  });
-});
+renderFeaturedProjects();
+selectProject(activeProjectId);
 
-stageOpen.addEventListener("click", () => openProject(stageOpen.dataset.openProject));
+stageActions.addEventListener("click", (event) => {
+  const openButton = event.target.closest("[data-open-project]");
+  if (openButton) openProject(openButton.dataset.openProject);
+});
 document.querySelector("[data-project-prev]").addEventListener("click", () => cycleProject(-1));
 document.querySelector("[data-project-next]").addEventListener("click", () => cycleProject(1));
 document.querySelector(".dialog-close").addEventListener("click", closeProject);
-dialogInquiry.addEventListener("click", () => {
-  const projectId = dialogInquiry.dataset.inquiryProject || activeProjectId;
-  setInquiryContext(projectId);
-  closeProject();
-  window.setTimeout(() => {
-    document.querySelector("#contact").scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
-    (inquiryForm.elements["fi-sender-fullName"] || inquiryForm.elements.name)?.focus();
-  }, reducedMotion ? 0 : 160);
-});
 
 inquiryForm.addEventListener("submit", submitInquiry);
 inquiryForm.querySelectorAll("input, select, textarea").forEach((field) => {
@@ -376,14 +508,28 @@ inquiryForm.querySelectorAll("input, select, textarea").forEach((field) => {
 });
 
 dialog.addEventListener("click", (event) => {
+  const inquiry = event.target.closest("[data-inquiry-project]");
+  if (inquiry) {
+    const projectId = inquiry.dataset.inquiryProject || activeProjectId;
+    setInquiryContext(projectId);
+    closeProject();
+    window.setTimeout(() => {
+      document.querySelector("#contact").scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
+      (inquiryForm.elements["fi-sender-fullName"] || inquiryForm.elements.name)?.focus();
+    }, reducedMotion ? 0 : 160);
+    return;
+  }
   if (event.target === dialog) closeProject();
 });
 
 dialog.addEventListener("close", () => {
+  const restoreY = lockedScrollY;
+  unlockPageScroll();
   if (!closingFromHistory && window.location.hash.startsWith("#project/")) {
     window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
   }
-  if (lastProjectFocus.element && document.contains(lastProjectFocus.element)) lastProjectFocus.element.focus();
+  if (lastProjectFocus.element && document.contains(lastProjectFocus.element)) lastProjectFocus.element.focus({ preventScroll: true });
+  window.setTimeout(() => window.scrollTo({ left: 0, top: restoreY, behavior: "auto" }), 80);
 });
 
 window.addEventListener("popstate", syncProjectFromLocation);
@@ -428,7 +574,7 @@ pillNav = initPillNav("#primary-nav", {
   items: [
     { label: "Home", href: "#top" },
     { label: "Note", href: "#note" },
-    { label: "Work", href: "#work" },
+    { label: "Workbench", href: "#workbench" },
     { label: "About", href: "#about" },
     { label: "Proof", href: "#proof" },
     { label: "Build", href: "#work-with-me" },
@@ -450,7 +596,7 @@ window.pillNav = pillNav;
 const sectionTargets = [
   { id: "top", index: 0, label: "Home" },
   { id: "note", index: 1, label: "Note" },
-  { id: "work", index: 2, label: "Work" },
+  { id: "workbench", index: 2, label: "Workbench" },
   { id: "about", index: 3, label: "About" },
   { id: "proof", index: 4, label: "Proof" },
   { id: "work-with-me", index: 5, label: "Build" },
