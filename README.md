@@ -1,53 +1,42 @@
-# Erva Savaliya — Portfolio
+# 🌷 Hey, I'm Erva
 
 > Academically busy. Professionally available.
 
-A personal developer portfolio and living index of work by [Erva Savaliya](https://github.com/Erva-S) — CSE student and web developer. Built with an editorial aesthetic, fluid typography, authentic interactive project previews, and accessible details.
+I'm a second-year Computer Science & Engineering student at **CSPIT, CHARUSAT**, quietly building my way up through code. I enjoy turning loose ideas into clean, functional websites and web applications, while continually exploring what's happening under the hood.
 
 ---
 
-### Philosophy
+### What I Do
 
-I’m interested in the moment an idea becomes something you can use: the questions behind it, the structure underneath it, and the small decisions that make an interface feel intentional and clear.
+- **Web Development**: Crafting responsive, thoughtful web interfaces and applications with attention to typography, layout, and how things actually feel to use.
+- **Cybersecurity & Systems Exploration**: Curious about networking, digital forensics, and CTF challenges — exploring how systems work (and occasionally break) from the inside out.
+- **Building & Iterating**: Creating prototypes, personal experiments, and hackathon builds where I can take something from a blank screen to a working product.
 
-### Technologies
+---
 
-- **Frontend**: Semantic HTML5, Vanilla CSS, Modern JavaScript (ES Modules)
-- **Tooling**: [Vite](https://vitejs.dev/)
-- **Animation**: [GSAP](https://gsap.com/) & ScrollTrigger
-- **Form Delivery**: [Forminit](https://forminit.com/) client SDK
+### Currently Learning & Exploring
 
-### Project Structure
+- Deepening core programming fundamentals and software engineering practices.
+- Modern frontend architecture and interactive web experiences.
+- Python, scripting, and command-line tooling.
+- Foundations of networking, web security, and hands-on CTF fundamentals.
 
-```text
-├── public/              # Monogram favicon and authentic preview assets
-├── index.html           # Accessible markup, semantic landmarks & structure
-├── styles.css           # Design tokens, layout system, and typography
-├── script.js            # Project registry, preview engine, hash routing & dialogs
-├── PillNav.js           # Floating navigation controller & physics transitions
-└── ScrollReveal.js      # Kinetic scroll reveal choreography
-```
+---
 
-### Local Development
+### A Few Things About Me
 
-```bash
-# Install dependencies
-npm install
+- I learn best by getting my hands dirty — whether that's building client websites, hackathon sprints, or tinkering with small technical experiments.
+- Most of my development time is split evenly between writing clean code and convincing CSS to do what I actually asked it to do.
+- Goal: keep improving as a developer, build things people find genuine value in, and see how far curiosity can take me.
 
-# Start development server
-npm run dev
+---
 
-# Create production build
-npm run build
+### Let's Connect
 
-# Preview production build locally
-npm run preview
-```
+I'm always open to discussing freelance projects, web collaborations, or just exchanging ideas.
 
-### Verified Links
+- 💼 **LinkedIn**: [linkedin.com/in/erva-savaliya](https://www.linkedin.com/in/erva-savaliya-4b945a378/)
+- 🐙 **GitHub**: [@Erva-S](https://github.com/Erva-S)
+- ✉️ **Email**: [erva.savaliya.20@gmail.com](mailto:erva.savaliya.20@gmail.com)
 
-- **Repository**: [Erva-S/Portfolio-2.0](https://github.com/Erva-S/Portfolio-2.0)
-- **Featured Client Deployment**: [Shreedutta Clinic](https://shreeduttaclinic.com/)
-- **Open-source Project**: [Aethera Travel Platform](https://github.com/Erva-S/odoo-LDCE)
-- **Connect**: [LinkedIn](https://www.linkedin.com/in/erva-savaliya-4b945a378/) · [Email](mailto:erva.savaliya.20@gmail.com) · [GitHub Profile](https://github.com/Erva-S)
 

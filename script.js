@@ -87,11 +87,12 @@ const projects = {
     meta: "AI · meetings · context",
     category: "AI meeting assistant",
     stack: "MeetingBaaS · ElevenLabs · Gemini",
+    repo: "https://github.com/Erva-S/revora-ai",
     summary: "An AI-powered meeting assistant that turns conversations into transcripts, summaries, action items, and durable project context.",
     objective: "Capture meeting information and carry decisions, open tasks, and relevant context forward across project conversations.",
     contribution: "The product combines Google Meet bot capture, MeetingBaaS recording and transcript workflows, ElevenLabs transcription, and Gemini-generated meeting follow-ups.",
     decisions: "Project-based organization keeps past decisions, action items, and meeting context available instead of isolating every conversation as a one-off record.",
-    result: "No public repository or deployment is displayed; the project remains represented by its brief until an approved public destination or sanitized capture is available.",
+    result: "Public repository available; open-source AI meeting assistant workflows and integrations.",
     preview: {
       type: "image",
       orientation: "landscape",
