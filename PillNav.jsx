@@ -37,12 +37,13 @@ const THEMES = {
 };
 
 const DEFAULT_ITEMS = [
+  { label: 'Home', href: '#top' },
   { label: 'Note', href: '#note' },
   { label: 'Workbench', href: '#workbench' },
   { label: 'About', href: '#about' },
   { label: 'Proof', href: '#proof' },
   { label: 'Build', href: '#work-with-me' },
-  { label: 'Contact', href: '#contact' }
+  { label: 'Connect', href: '#contact' }
 ];
 
 export const PillNav = ({

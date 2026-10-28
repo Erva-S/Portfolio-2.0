@@ -50,7 +50,7 @@ let activeSectionFrame = 0;
 let navigationHasStarted = false;
 let initialScrollY = window.scrollY || document.documentElement.scrollTop || 0;
 let programmaticTargetIndex = null;
-let preserveInitialUnselected = window.location.hash === "#note";
+let initialAnchorPending = false;
 let lockedScrollY = 0;
 const bodyLockStyles = { position: "", top: "", width: "", overflow: "" };
 let previousScrollBehavior = "";
@@ -178,7 +178,7 @@ function updateScrollChrome() {
   const amount = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
   progress.style.width = `${amount}%`;
   header.classList.toggle("is-scrolled", window.scrollY > 30);
-  if (pillNav && !preserveInitialUnselected && Math.abs(window.scrollY - initialScrollY) > 1) navigationHasStarted = true;
+  if (pillNav && Math.abs(window.scrollY - initialScrollY) > 1) navigationHasStarted = true;
   if (programmaticTargetIndex !== null && programmaticTargetReached()) finishProgrammaticNavigation();
   if (pillNav && navigationHasStarted) pillNav.replayActive(true);
   scheduleActiveSectionUpdate();
@@ -578,7 +578,7 @@ pillNav = initPillNav("#primary-nav", {
     { label: "About", href: "#about" },
     { label: "Proof", href: "#proof" },
     { label: "Build", href: "#work-with-me" },
-    { label: "Contact", href: "#contact" }
+    { label: "Connect", href: "#contact" }
   ],
   defaultActiveIndex: -1,
   hoverEffect: "fill",
@@ -600,7 +600,7 @@ const sectionTargets = [
   { id: "about", index: 3, label: "About" },
   { id: "proof", index: 4, label: "Proof" },
   { id: "work-with-me", index: 5, label: "Build" },
-  { id: "contact", index: 6, label: "Contact" }
+  { id: "contact", index: 6, label: "Connect" }
 ].map(item => ({ ...item, el: document.querySelector(`#${item.id}`) })).filter(item => Boolean(item.el));
 
 function programmaticTargetReached() {
@@ -677,6 +677,7 @@ function scheduleActiveSectionUpdate() {
 }
 
 function cancelProgrammaticNavigation() {
+  initialAnchorPending = false;
   if (programmaticTargetIndex === null) return;
   programmaticTargetIndex = null;
   scheduleActiveSectionUpdate();
@@ -692,7 +693,6 @@ function finishProgrammaticNavigation() {
 // handler also detects scrollbar/programmatic movement, so tracking has one
 // continuous source of truth regardless of how the page moved.
 const markNavigationStarted = () => {
-  preserveInitialUnselected = false;
   cancelProgrammaticNavigation();
   if (navigationHasStarted) return;
   navigationHasStarted = true;
@@ -718,7 +718,7 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
 
     event.preventDefault();
     closeMenu();
-    preserveInitialUnselected = false;
+    initialAnchorPending = false;
     navigationHasStarted = true;
 
     const match = sectionTargets.find(t => `#${t.id}` === href);
@@ -747,9 +747,9 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
 });
 
 window.addEventListener("popstate", () => {
+  initialAnchorPending = false;
   const hash = window.location.hash;
   if (!hash || hash === "#top") {
-    preserveInitialUnselected = false;
     navigationHasStarted = true;
     programmaticTargetIndex = 0;
     currentActiveIndex = 0;
@@ -759,7 +759,6 @@ window.addEventListener("popstate", () => {
   }
   const match = sectionTargets.find(t => `#${t.id}` === hash);
   if (match && pillNav) {
-    preserveInitialUnselected = false;
     navigationHasStarted = true;
     programmaticTargetIndex = match.index;
     currentActiveIndex = match.index;
@@ -769,31 +768,35 @@ window.addEventListener("popstate", () => {
   }
 });
 
-// Keep the initial navigation state unselected. The first real scroll or
-// anchor navigation opts into continuous section tracking.
+// Section URLs select their matching item immediately. Without an anchor,
+// the first real scroll or navigation opts into continuous section tracking.
 function initStartingNavigation() {
-  if (window.location.hash) {
-    if (window.location.hash === "#top") {
-      navigationHasStarted = true;
-      currentActiveIndex = 0;
-      pillNav?.setActive(0, false);
-      return;
-    }
-    if (window.location.hash === "#note") {
-      preserveInitialUnselected = true;
-      navigationHasStarted = false;
-      currentActiveIndex = -1;
-      pillNav?.setActive(-1, false);
-      return;
-    }
-    const match = sectionTargets.find(t => `#${t.id}` === window.location.hash);
-    if (match && pillNav) {
-      preserveInitialUnselected = false;
-      navigationHasStarted = true;
+  const initialHash = window.location.hash;
+  const match = sectionTargets.find(t => `#${t.id}` === initialHash);
+  if (match && pillNav) {
+    navigationHasStarted = true;
+    currentActiveIndex = match.index;
+    pillNav.setActive(match.index, false);
+    initialAnchorPending = true;
+
+    // Fonts and generated content can move a native fragment landing on a cold
+    // load. Settle it once the layout is ready, unless the user has navigated.
+    const pageLoaded = document.readyState === "complete"
+      ? Promise.resolve()
+      : new Promise(resolve => window.addEventListener("load", resolve, { once: true }));
+    pageLoaded.then(() => document.fonts.ready).then(() => {
+      if (!initialAnchorPending || window.location.hash !== initialHash || dialog.open) return;
+      initialAnchorPending = false;
+      if (match.index === 0) {
+        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      } else {
+        match.el.scrollIntoView({ behavior: "instant", block: "start" });
+      }
       currentActiveIndex = match.index;
       pillNav.setActive(match.index, false);
-      return;
-    }
+      scheduleActiveSectionUpdate();
+    });
+    return;
   }
 
   currentActiveIndex = -1;

@@ -20,7 +20,7 @@ export function initPillNav(container, options = {}) {
       { label: 'About', href: '#about' },
       { label: 'Proof', href: '#proof' },
       { label: 'Build', href: '#work-with-me' },
-      { label: 'Contact', href: '#contact' }
+      { label: 'Connect', href: '#contact' }
     ],
     defaultActiveIndex = -1,
     hoverEffect = 'fill', // 'fill' (rolling label + circle fill) or 'glide' (gliding pill follows hover)
