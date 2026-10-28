@@ -275,7 +275,7 @@ button { color: inherit; }
   isolation: isolate;
 }
 
-.hero-rail, .section-rail, .hero-kicker, .stage-header, .stage-caption-label, .dialog-top, .detail-grid > div > span, .project-index-meta, .contact-services, .footer-bottom, .contact-actions p {
+.hero-rail, .section-rail, .hero-kicker, .hero-tagline, .stage-header, .stage-caption-label, .dialog-top, .detail-grid > div > span, .project-index-meta, .contact-services, .footer-bottom, .contact-actions p {
   font-size: var(--type-label);
   font-weight: 600;
   letter-spacing: var(--tracking-label);
@@ -339,6 +339,12 @@ button { color: inherit; }
 
 .display-title em, .section-title em, .contact-title em { color: var(--gold); font-weight: 400; }
 .hero-dot { color: var(--gold); }
+
+.hero-tagline {
+  margin: clamp(14px, 2vh, 22px) 0 0;
+  color: var(--muted);
+  max-width: 100%;
+}
 
 .hero-support { max-width: 450px; padding-bottom: 4px; }
 .hero-support > p { margin: 0; color: var(--ink-soft); font-size: var(--type-body); line-height: var(--leading-body); }
@@ -704,6 +710,7 @@ button { color: inherit; }
   .hero-line { white-space: normal; }
   .hero-title { font-size: clamp(2.1rem, 9.2vw, 3.1rem); line-height: 0.98; }
   .hero-kicker { font-size: 12px; margin-bottom: 12px; }
+  .hero-tagline { font-size: 10px; margin-top: 12px; letter-spacing: 0.07em; }
   .hero-support > p { font-size: 14px; line-height: 1.62; }
   .hero-actions { gap: 12px; }
   .hero-actions .button { padding: 12px 18px; min-width: 0; }
@@ -727,6 +734,7 @@ button { color: inherit; }
   .wordmark-mark { font-size: 20px; }
   .hero-rail { flex-direction: column; align-items: flex-start; gap: 6px; }
   .hero-title { font-size: clamp(1.85rem, 8.8vw, 2.35rem); }
+  .hero-tagline { font-size: 9px; letter-spacing: 0.05em; }
   .hero-actions { flex-direction: column; align-items: stretch; width: 100%; }
   .hero-actions .button { width: 100%; justify-content: center; }
   .hero-actions .text-link { justify-content: center; text-align: center; }
@@ -734,7 +742,7 @@ button { color: inherit; }
 }
 
 @media (max-width: 780px) {
-  .hero-rail, .section-rail, .hero-kicker, .stage-header, .stage-caption-label, .dialog-top, .detail-grid > div > span, .project-index-meta, .contact-services, .footer-bottom, .contact-actions p { font-size: var(--type-label); }
+  .hero-rail, .section-rail, .hero-kicker, .hero-tagline, .stage-header, .stage-caption-label, .dialog-top, .detail-grid > div > span, .project-index-meta, .contact-services, .footer-bottom, .contact-actions p { font-size: var(--type-label); }
   .hero-support > p, .statement-copy, .about-narrative p, .contact-copy, .collab-heading > p { font-size: var(--type-body-sm); line-height: var(--leading-body); }
   .service-info p, .milestone p { font-size: var(--type-body-sm); line-height: var(--leading-body); }
   .dialog-summary { font-size: var(--type-body-sm); }
