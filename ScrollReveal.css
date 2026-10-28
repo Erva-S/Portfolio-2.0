@@ -15,7 +15,7 @@
 }
 
 .scroll-reveal-piece {
-  will-change: opacity, filter;
+  will-change: opacity, filter, transform;
 }
 
 @media (prefers-reduced-motion: reduce) {

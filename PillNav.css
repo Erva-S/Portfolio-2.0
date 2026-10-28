@@ -361,7 +361,16 @@
   font-weight: 600;
 }
 
-@media (max-width: 780px) {
+@media (max-width: 1060px) and (min-width: 841px) {
+  .pill-nav {
+    --pn-x: 10px;
+    --pn-gap: 4px;
+    --pn-item-gap: 1px;
+    --pn-font: 12px;
+  }
+}
+
+@media (max-width: 840px) {
   .pill-nav__bar {
     display: none;
   }

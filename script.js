@@ -540,30 +540,32 @@ setInquiryContext("");
 const scrollRevealInstances = [...document.querySelectorAll("[data-scroll-reveal]")]
   .map((element) => initScrollReveal(element, {
     enableBlur: true,
-    baseOpacity: 0.16,
+    baseOpacity: 0.28,
     baseRotation: 0,
-    blurStrength: 2.5,
-    baseOffset: 0,
-    stagger: 0.045,
-    smoothing: 0.12,
+    blurStrength: 1.5,
+    baseOffset: 4,
+    stagger: 0.035,
+    smoothing: 0.1,
     splitBy: "words",
-    effect: "fade",
+    effect: "rise",
     mode: "scrub",
     duration: 0.8,
-    rotationEnd: "bottom bottom",
-    wordAnimationEnd: "bottom bottom"
+    rotationEnd: "bottom 85%",
+    wordAnimationEnd: "bottom 85%"
   }))
   .filter(Boolean);
 
 const revealItems = document.querySelectorAll(".reveal");
 if ("IntersectionObserver" in window && !reducedMotion) {
-  const revealObserver = new IntersectionObserver((entries, observer) => {
+  const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add("is-visible");
-      observer.unobserve(entry.target);
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+      } else if (entry.boundingClientRect.top > (window.innerHeight || 800)) {
+        entry.target.classList.remove("is-visible");
+      }
     });
-  }, { threshold: 0.13, rootMargin: "0px 0px -8% 0px" });
+  }, { threshold: 0.08, rootMargin: "0px 0px -4% 0px" });
   revealItems.forEach((item) => revealObserver.observe(item));
 } else {
   revealItems.forEach((item) => item.classList.add("is-visible"));

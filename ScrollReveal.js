@@ -176,9 +176,12 @@ export function initScrollReveal(target, options = {}) {
       count = line + 1;
     };
 
+    let maxP = 0;
     const total = () => span + Math.max(0, count - 1) * gap;
     const render = () => {
-      const at = state.p * total();
+      maxP = Math.max(maxP, state.p);
+      const effectiveP = maxP;
+      const at = effectiveP * total();
       pieces.forEach((piece, index) => {
         const progress = clamp01((at - order[index] * gap) / span);
         if (progress === last[index]) return;
@@ -239,9 +242,15 @@ export function initScrollReveal(target, options = {}) {
         scrollTrigger: {
           trigger: element,
           scroller,
-          start: () => `top bottom-=${0.2 * Math.min(element.offsetHeight, viewportHeight())}`,
+          start: () => `top bottom-=${0.18 * Math.min(element.offsetHeight, viewportHeight())}`,
           end: clampToScroll(wordAnimationEnd),
-          scrub
+          scrub,
+          onLeaveBack: () => {
+            maxP = 0;
+            state.p = 0;
+            last.fill(-1);
+            render();
+          }
         }
       });
     }

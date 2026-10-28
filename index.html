@@ -125,7 +125,7 @@
 
     <main id="main">
       <section class="hero" id="top" aria-labelledby="hero-title">
-        <div class="hero-meta hero-meta--top">
+        <div class="hero-rail reveal reveal--fade">
           <span>01 — Introduction</span>
           <span class="availability-tag"><span class="availability-dot" aria-hidden="true"></span>Open to web development projects</span>
         </div>
@@ -145,30 +145,26 @@
             </div>
           </div>
         </div>
-        <div class="hero-meta hero-meta--bottom">
-          <span>CSE Student · Web Developer · Open to Freelance Projects</span>
-          <span>ACADEMICALLY BUSY. PROFESSIONALLY AVAILABLE.</span>
-        </div>
       </section>
 
       <section class="statement section-pad" id="note" aria-labelledby="statement-title">
         <div class="section-rail reveal reveal--fade"><span>02 — A short note</span><span>Why this exists</span></div>
         <div class="statement-layout">
-          <h2 class="display-title reveal reveal--shift" id="statement-title">I’m interested in the moment an idea becomes <em>something you can use.</em></h2>
+          <h2 class="display-title reveal reveal--rise" id="statement-title">I’m interested in the moment an idea becomes <em>something you can use.</em></h2>
           <div class="statement-copy"><p data-scroll-reveal>Not just the interface. The question behind it, the structure underneath it, and the small decisions that make it feel clear.</p><p data-scroll-reveal>This portfolio is a living index of that practice — actual repositories, documented status, and work that is honest about what is finished and what is still becoming.</p></div>
         </div>
       </section>
 
       <section class="work section-pad" id="workbench" aria-labelledby="work-title">
-        <div class="section-rail reveal reveal--fade"><span>03 — The workbench</span><span>A deliberate edit</span></div>
-        <div class="work-heading"><div class="reveal reveal--shift"><h2 class="section-title" id="work-title">Built to be used,<br /><em>kept honest.</em></h2></div><p data-scroll-reveal>A small, public edit of the work I’m most ready to stand behind — real interfaces, real evidence, and room for the next build.</p></div>
+        <div class="section-rail"><span>03 — The workbench</span><span>A deliberate edit</span></div>
+        <div class="work-heading"><div><h2 class="section-title" id="work-title">Built to be used,<br /><em>kept honest.</em></h2></div><p>A small, public edit of the work I’m most ready to stand behind — real interfaces, real evidence, and room for the next build.</p></div>
 
         <div class="work-shell">
           <div class="project-index" role="list" aria-label="Featured projects">
             <div class="project-list" id="featured-project-list"></div>
           </div>
 
-          <div class="project-stage reveal reveal--stage" aria-live="polite">
+          <div class="project-stage" aria-live="polite">
             <div class="stage-header"><span id="stage-preview-label">Authentic project preview</span></div>
             <div class="project-preview" id="project-preview" role="img" aria-label="Selected project preview"></div>
             <div class="stage-caption"><div><span class="stage-caption-label" id="stage-category">Clinic management platform · deployed</span><h3 id="stage-title">Shreedutta Clinic</h3></div><div class="stage-actions" id="stage-actions"></div></div>
@@ -178,30 +174,53 @@
 
       <section class="about section-pad" id="about" aria-labelledby="about-title">
         <div class="section-rail reveal reveal--fade"><span>04 — About & capabilities</span><span>Learning by implementation</span></div>
-        <div class="about-layout">
-          <div class="about-mark reveal reveal--stage" aria-label="ES monogram composition">
-            <div class="about-mark__top"><span>ES / 01</span><span>MAKE / MEANING</span></div>
-            <div class="about-mark__core" aria-hidden="true">
-              <span class="about-mark__axis"></span>
-              <strong class="about-mark__letter about-mark__letter--e">E</strong>
-              <strong class="about-mark__letter about-mark__letter--s">S</strong>
-              <span class="about-mark__index">01</span>
-            </div>
-            <div class="about-mark__bottom"><span>ERVA SAVALIYA</span><span>INTERFACE / SYSTEMS</span></div>
+        <div class="about-hero">
+          <div class="about-hero__headline">
+            <h2 class="about-title reveal reveal--rise" id="about-title">
+              <span class="about-title__lead">Still figuring it out.</span>
+              <em class="about-title__sub">That’s the point.</em>
+            </h2>
           </div>
-          <div class="about-copy"><h2 class="display-title reveal reveal--shift" id="about-title">Still figuring it out.<br /><em>That’s the point.</em></h2><div class="about-body"><p data-scroll-reveal>I’m a CSE student who learns by making things real: a product workspace, a systems experiment, a command-line tool, a workflow that turns a loose idea into something with edges.</p><p data-scroll-reveal>My current direction sits between frontend engineering, freelance web development, and software craft. I’m not presenting a finished career story — I’m building a useful one.</p></div><div class="capability-lines"><div><span>01</span><strong data-scroll-reveal>Build interfaces</strong><p data-scroll-reveal>Responsive frontend work with attention to hierarchy, state, and detail.</p></div><div><span>02</span><strong data-scroll-reveal>Connect the pieces</strong><p data-scroll-reveal>Applications, APIs, data, and technical experiments that go beyond the surface.</p></div><div><span>03</span><strong data-scroll-reveal>Keep investigating</strong><p data-scroll-reveal>Networking, CTFs, OSINT, and security concepts as developing interests.</p></div></div></div>
+          <div class="about-narrative">
+            <p data-scroll-reveal>I’m a CSE student who learns by making things real: a product workspace, a systems experiment, a command-line tool, a workflow that turns a loose idea into something with edges.</p>
+            <p data-scroll-reveal>My current direction sits between frontend engineering, freelance web development, and software craft. I’m not presenting a finished career story — I’m building a useful one.</p>
+          </div>
+        </div>
+
+        <div class="about-capabilities" aria-label="Capabilities">
+          <div class="capability-item">
+            <span class="capability-num">01</span>
+            <div class="capability-content">
+              <strong data-scroll-reveal>Build interfaces</strong>
+              <p data-scroll-reveal>Responsive frontend work with attention to hierarchy, state, and detail.</p>
+            </div>
+          </div>
+          <div class="capability-item">
+            <span class="capability-num">02</span>
+            <div class="capability-content">
+              <strong data-scroll-reveal>Connect the pieces</strong>
+              <p data-scroll-reveal>Applications, APIs, data, and technical experiments that go beyond the surface.</p>
+            </div>
+          </div>
+          <div class="capability-item">
+            <span class="capability-num">03</span>
+            <div class="capability-content">
+              <strong data-scroll-reveal>Keep investigating</strong>
+              <p data-scroll-reveal>Networking, CTFs, OSINT, and security concepts as developing interests.</p>
+            </div>
+          </div>
         </div>
       </section>
 
       <section class="milestones section-pad" id="proof" aria-labelledby="milestones-title">
         <div class="section-rail reveal reveal--fade"><span>05 — Milestones</span><span>A compact record</span></div>
-        <div class="milestones-layout"><h2 class="section-title reveal reveal--shift" id="milestones-title">What the trajectory<br /><em>looks like now.</em></h2><div class="milestone-list"><div class="milestone"><span>Now</span><div><h3 data-scroll-reveal>Second-year CSE student</h3><p data-scroll-reveal>CSPIT, CHARUSAT · building foundations through coursework, projects, and collaboration.</p></div></div><div class="milestone"><span>Focus</span><div><h3 data-scroll-reveal>Frontend + software engineering</h3><p data-scroll-reveal>Interfaces with enough structure underneath them to be useful, testable, and understandable.</p></div></div><div class="milestone"><span>Explore</span><div><h3 data-scroll-reveal>Security learning in progress</h3><p data-scroll-reveal>CTFs, OSINT, networking, and digital-forensics curiosity — not a professional security service.</p></div></div></div></div>
+        <div class="milestones-layout"><h2 class="section-title reveal reveal--rise" id="milestones-title">What the trajectory<br /><em>looks like now.</em></h2><div class="milestone-list"><div class="milestone"><span>Now</span><div><h3 data-scroll-reveal>Second-year CSE student</h3><p data-scroll-reveal>CSPIT, CHARUSAT · building foundations through coursework, projects, and collaboration.</p></div></div><div class="milestone"><span>Focus</span><div><h3 data-scroll-reveal>Frontend + software engineering</h3><p data-scroll-reveal>Interfaces with enough structure underneath them to be useful, testable, and understandable.</p></div></div><div class="milestone"><span>Explore</span><div><h3 data-scroll-reveal>Security learning in progress</h3><p data-scroll-reveal>CTFs, OSINT, networking, and digital-forensics curiosity — not a professional security service.</p></div></div></div></div>
       </section>
 
       <section class="work-with-me section-pad" id="work-with-me" aria-labelledby="work-with-me-title">
         <div class="section-rail reveal reveal--fade"><span>06 — What I build</span><span>Areas of focus</span></div>
         <div class="collab-heading">
-          <h2 class="section-title" id="work-with-me-title">What I can <em>build for you.</em></h2>
+          <h2 class="section-title reveal reveal--rise" id="work-with-me-title">What I can <em>build for you.</em></h2>
           <p data-scroll-reveal>I’m open to collaborating on thoughtful websites, clean interfaces, and focused web applications.</p>
         </div>
         <div class="services-list" aria-label="What I build">
@@ -238,7 +257,7 @@
         <div class="section-rail section-rail--light reveal reveal--fade"><span>07 — Contact</span><span>Say hello</span></div>
         <div class="contact-layout">
           <div>
-            <h2 class="contact-title reveal reveal--shift" id="contact-title">Have an idea? <em>Let’s talk.</em></h2>
+            <h2 class="contact-title reveal reveal--rise" id="contact-title">Have an idea? <em>Let’s talk.</em></h2>
             <p class="contact-copy" data-scroll-reveal>If you're looking for a website or have an idea you'd like to explore, I'd love to hear about it.</p>
           </div>
           <div class="contact-actions reveal reveal--rise">
