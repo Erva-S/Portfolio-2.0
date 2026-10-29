@@ -3,323 +3,654 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#FAF8F3" />
-    <meta name="description" content="Erva Savaliya — a CSE student and creative developer building thoughtful interfaces, web applications, and technical experiments." />
-    <meta property="og:title" content="Erva Savaliya — Ideas worth building." />
-    <meta property="og:description" content="A living portfolio of real projects, technical experiments, and work in progress by Erva Savaliya." />
+    <meta name="theme-color" content="#0B0C0E" />
+    <meta name="description" content="Erva Savaliya — CSE student and web developer building thoughtful websites, useful web applications, and technical experiments." />
+    <meta property="og:title" content="Erva Savaliya — Building things for the web." />
+    <meta property="og:description" content="A living index of real projects, technical experiments, and work in progress by Erva Savaliya." />
     <meta property="og:type" content="website" />
-    <title>Erva Savaliya — Ideas worth building.</title>
+    <title>Erva Savaliya — Building things for the web.</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <div class="scroll-progress" aria-hidden="true"></div>
 
+    <!-- Header & Compact Navigation (Identity & Navigation) -->
     <header class="site-header" data-header>
-      <div class="nav-wrap">
-        <a class="wordmark" href="#top" aria-label="Erva Savaliya home">
-          <span class="wordmark-mark" aria-hidden="true">ES</span>
-          <span class="wordmark-name luminous-type" aria-label="Erva Savaliya">
-            <span class="luminous-base" aria-hidden="true">Erva Savaliya</span>
-            <span class="luminous-light" aria-hidden="true">Erva Savaliya</span>
-          </span>
+      <div class="nav-container">
+        <a class="nav-brand" href="#top" aria-label="Erva Savaliya home">
+          <span>ES / INDEX</span>
         </a>
-        <nav class="pill-nav primary-nav" id="primary-nav" aria-label="Primary navigation">
-          <div class="pill-nav__bar pill-nav__surface">
-            <div class="pill-nav__track">
-              <ul class="pill-nav__list">
-                <li class="pill-nav__slot" data-index="0">
-                  <a href="#top" class="pill-nav__item" data-nav-link>
-                    <span class="pill-nav__fill" aria-hidden="true"></span>
-                    <span class="pill-nav__face">Home</span>
-                    <span class="pill-nav__face-alt" aria-hidden="true">Home</span>
-                  </a>
-                </li>
-                <li class="pill-nav__slot" data-index="1">
-                  <a href="#note" class="pill-nav__item" data-nav-link>
-                    <span class="pill-nav__fill" aria-hidden="true"></span>
-                    <span class="pill-nav__face">Note</span>
-                    <span class="pill-nav__face-alt" aria-hidden="true">Note</span>
-                  </a>
-                </li>
-                <li class="pill-nav__slot" data-index="2">
-                  <a href="#workbench" class="pill-nav__item" data-nav-link>
-                    <span class="pill-nav__fill" aria-hidden="true"></span>
-                    <span class="pill-nav__face">Workbench</span>
-                    <span class="pill-nav__face-alt" aria-hidden="true">Workbench</span>
-                  </a>
-                </li>
-                <li class="pill-nav__slot" data-index="3">
-                  <a href="#about" class="pill-nav__item" data-nav-link>
-                    <span class="pill-nav__fill" aria-hidden="true"></span>
-                    <span class="pill-nav__face">About</span>
-                    <span class="pill-nav__face-alt" aria-hidden="true">About</span>
-                  </a>
-                </li>
-                <li class="pill-nav__slot" data-index="4">
-                  <a href="#proof" class="pill-nav__item" data-nav-link>
-                    <span class="pill-nav__fill" aria-hidden="true"></span>
-                    <span class="pill-nav__face">Proof</span>
-                    <span class="pill-nav__face-alt" aria-hidden="true">Proof</span>
-                  </a>
-                </li>
-                <li class="pill-nav__slot" data-index="5">
-                  <a href="#work-with-me" class="pill-nav__item" data-nav-link>
-                    <span class="pill-nav__fill" aria-hidden="true"></span>
-                    <span class="pill-nav__face">Build</span>
-                    <span class="pill-nav__face-alt" aria-hidden="true">Build</span>
-                  </a>
-                </li>
-                <li class="pill-nav__slot" data-index="6">
-                  <a href="#contact" class="pill-nav__item" data-nav-link>
-                    <span class="pill-nav__fill" aria-hidden="true"></span>
-                    <span class="pill-nav__face">Connect</span>
-                    <span class="pill-nav__face-alt" aria-hidden="true">Connect</span>
-                  </a>
-                </li>
-              </ul>
-              <span class="pill-nav__glide" aria-hidden="true"></span>
-              <div class="pill-nav__ink" aria-hidden="true">
-                <span class="pill-nav__ink-item">Home</span>
-                <span class="pill-nav__ink-item">Note</span>
-                <span class="pill-nav__ink-item">Workbench</span>
-                <span class="pill-nav__ink-item">About</span>
-                <span class="pill-nav__ink-item">Proof</span>
-                <span class="pill-nav__ink-item">Build</span>
-                <span class="pill-nav__ink-item">Connect</span>
-              </div>
-              <span class="pill-nav__dot" aria-hidden="true"></span>
-            </div>
-            <span class="pill-nav__rim" aria-hidden="true"></span>
-          </div>
 
-          <!-- Mobile Hamburger Toggle -->
-          <button class="pill-nav__toggle pill-nav__surface" type="button" aria-expanded="false" aria-label="Open navigation" aria-controls="mobile-nav-panel">
-            <span class="pill-nav__burger" aria-hidden="true">
-              <span class="pill-nav__line pill-nav__line--top"></span>
-              <span class="pill-nav__line pill-nav__line--bottom"></span>
-            </span>
-            <span class="pill-nav__rim" aria-hidden="true"></span>
-          </button>
+        <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-label="Toggle navigation">
+          <span>MENU</span>
+        </button>
 
-          <!-- Mobile Drawer Panel -->
-          <div class="pill-nav__panel pill-nav__surface" id="mobile-nav-panel">
-            <ul class="pill-nav__menu">
-              <li data-index="0"><a href="#top" class="pill-nav__row" data-nav-link>Home</a></li>
-              <li data-index="1"><a href="#note" class="pill-nav__row" data-nav-link>Note</a></li>
-              <li data-index="2"><a href="#workbench" class="pill-nav__row" data-nav-link>Workbench</a></li>
-              <li data-index="3"><a href="#about" class="pill-nav__row" data-nav-link>About</a></li>
-              <li data-index="4"><a href="#proof" class="pill-nav__row" data-nav-link>Proof</a></li>
-              <li data-index="5"><a href="#work-with-me" class="pill-nav__row" data-nav-link>Build</a></li>
-              <li data-index="6"><a href="#contact" class="pill-nav__row" data-nav-link>Connect</a></li>
-            </ul>
-            <span class="pill-nav__rim" aria-hidden="true"></span>
-          </div>
+        <nav class="nav-links" id="primary-nav" aria-label="Primary navigation">
+          <a href="#note" class="nav-link" data-nav-link>Note</a>
+          <a href="#work" class="nav-link" data-nav-link>Work</a>
+          <a href="#about" class="nav-link" data-nav-link>About</a>
+          <a href="#proof" class="nav-link" data-nav-link>Proof</a>
+          <a href="#build" class="nav-link" data-nav-link>Build</a>
+          <a href="#connect" class="nav-link" data-nav-link>Connect</a>
         </nav>
       </div>
     </header>
 
-    <main id="main">
-      <section class="hero" id="top" aria-labelledby="hero-title">
-        <div class="hero-rail reveal reveal--fade">
-          <span>01 — Introduction</span>
-          <span class="availability-tag"><span class="availability-dot" aria-hidden="true"></span>Open to web development projects</span>
+    <main id="main" class="site-shell">
+      <!-- 01 — Digital Playground / Hero -->
+      <section class="portfolio-section hero-section" id="top" aria-labelledby="hero-name">
+        <div class="hero-kicker-row reveal">
+          <span>CSE STUDENT / WEB DEVELOPER</span>
+          <span>CSPIT, CHARUSAT</span>
         </div>
-        <div class="hero-main">
-          <div class="hero-heading-wrap">
-            <p class="hero-kicker reveal reveal--fade"><span class="hero-kicker-name">Erva Savaliya</span> <span class="hero-kicker-sep">·</span> CSPIT, CHARUSAT</p>
-            <h1 class="hero-title" id="hero-title" tabindex="0" aria-label="building my way up.">
-              <span class="hero-line hero-line--one">building my way</span>
-              <span class="hero-line hero-line--two"><em>up.</em></span>
-            </h1>
-            <p class="hero-tagline reveal reveal--fade">ACADEMICALLY BUSY. PROFESSIONALLY AVAILABLE.</p>
-          </div>
-          <div class="hero-support reveal reveal--rise">
-            <p>I'm Erva, a CSE student and web developer who turns ideas into thoughtful websites and useful web applications. Open to freelance projects and collaborations, I enjoy building digital experiences that look great and work smoothly.</p>
-            <div class="hero-actions">
-              <a class="button button--dark" href="#workbench" aria-label="Proof of work"><span>Proof of work</span></a>
-              <a class="text-link" href="#contact" aria-label="Start a conversation with Erva">Start a conversation</a>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      <section class="statement section-pad" id="note" aria-labelledby="statement-title">
-        <div class="section-rail reveal reveal--fade"><span>02 — A short note</span><span>Why this exists</span></div>
-        <div class="statement-layout">
-          <h2 class="display-title reveal reveal--rise" id="statement-title">I’m interested in the moment an idea becomes <em>something you can use.</em></h2>
-          <div class="statement-copy"><p data-scroll-reveal>Not just the interface. The question behind it, the structure underneath it, and the small decisions that make it feel clear.</p><p data-scroll-reveal>This portfolio is a living index of that practice — actual repositories, documented status, and work that is honest about what is finished and what is still becoming.</p></div>
-        </div>
-      </section>
+        <h1 class="hero-name-heading reveal" id="hero-name">
+          ERVA SAVALIYA
+        </h1>
 
-      <section class="work section-pad" id="workbench" aria-labelledby="work-title">
-        <div class="section-rail"><span>03 — The workbench</span><span>A deliberate edit</span></div>
-        <div class="work-heading"><div><h2 class="section-title" id="work-title">Built to be used,<br /><em>kept honest.</em></h2></div><p>A small, public edit of the work I’m most ready to stand behind — real interfaces, real evidence, and room for the next build.</p></div>
-
-        <div class="work-shell">
-          <div class="project-index" role="list" aria-label="Featured projects">
-            <div class="project-list" id="featured-project-list"></div>
-          </div>
-
-          <div class="project-stage" aria-live="polite">
-            <div class="stage-header"><span id="stage-preview-label">Authentic project preview</span></div>
-            <div class="project-preview" id="project-preview" role="img" aria-label="Selected project preview"></div>
-            <div class="stage-caption"><div><span class="stage-caption-label" id="stage-category">Clinic management platform · deployed</span><h3 id="stage-title">Shreedutta Clinic</h3></div><div class="stage-actions" id="stage-actions"></div></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="about section-pad" id="about" aria-labelledby="about-title">
-        <div class="section-rail reveal reveal--fade"><span>04 — About & capabilities</span><span>Learning by implementation</span></div>
-        <div class="about-hero">
-          <div class="about-hero__headline">
-            <h2 class="about-title reveal reveal--rise" id="about-title">
-              <span class="about-title__lead">Still figuring it out.</span>
-              <em class="about-title__sub">That’s the point.</em>
+        <div class="hero-split-grid">
+          <div class="hero-statement-col reveal">
+            <h2 class="hero-headline">
+              BUILDING THINGS FOR THE WEB.
             </h2>
+            <p class="hero-lead-text">
+              Thoughtful websites. Useful web applications. An ongoing experiment in making things work.
+            </p>
+            <p class="hero-bio-text">
+              I'm Erva, a CSE student and web developer who turns ideas into thoughtful websites and useful web applications. Open to freelance projects and collaborations, I enjoy building digital experiences that look great and work smoothly.
+            </p>
+            <div class="hero-actions-row">
+              <a class="btn-brutalist" href="#work">Proof of work</a>
+              <a class="btn-brutalist btn-brutalist--outline" href="#connect">Start a conversation</a>
+            </div>
           </div>
-          <div class="about-narrative">
-            <p data-scroll-reveal>I’m a CSE student who learns by making things real: a product workspace, a systems experiment, a command-line tool, a workflow that turns a loose idea into something with edges.</p>
-            <p data-scroll-reveal>My current direction sits between frontend engineering, freelance web development, and software craft. I’m not presenting a finished career story — I’m building a useful one.</p>
+
+          <!-- Hero Object 001: Interactive Construction Object -->
+          <div class="hero-interactive-object reveal" id="hero-interactive-object" title="Hover to disrupt">
+            <div class="hero-interactive-mark">{ ES }</div>
+            <p class="hero-interactive-label">OBJECT_001 / HOVER TO DISRUPT</p>
           </div>
         </div>
 
-        <div class="about-capabilities" aria-label="Capabilities">
-          <div class="capability-item">
-            <span class="capability-num">01</span>
-            <div class="capability-content">
-              <strong data-scroll-reveal>Build interfaces</strong>
-              <p data-scroll-reveal>Responsive frontend work with attention to hierarchy, state, and detail.</p>
-            </div>
+        <!-- Availability Signal -->
+        <div class="hero-availability-row reveal">
+          <span class="availability-dot-pulse" aria-hidden="true"></span>
+          <span>OPEN FOR FREELANCE + COLLABORATIONS</span>
+          <span class="availability-tagline">ACADEMICALLY BUSY. PROFESSIONALLY AVAILABLE.</span>
+        </div>
+      </section>
+
+      <!-- 02 — Note -->
+      <section class="portfolio-section note-section" id="note" aria-labelledby="note-title">
+        <div class="note-grid">
+          <div class="note-label-col reveal">
+            <p class="section-label">02 / NOTE</p>
           </div>
-          <div class="capability-item">
-            <span class="capability-num">02</span>
-            <div class="capability-content">
-              <strong data-scroll-reveal>Connect the pieces</strong>
-              <p data-scroll-reveal>Applications, APIs, data, and technical experiments that go beyond the surface.</p>
-            </div>
-          </div>
-          <div class="capability-item">
-            <span class="capability-num">03</span>
-            <div class="capability-content">
-              <strong data-scroll-reveal>Keep investigating</strong>
-              <p data-scroll-reveal>Networking, CTFs, OSINT, and security concepts as developing interests.</p>
+          <div class="note-content-col">
+            <h2 class="section-heading-condensed section-heading-condensed--lime reveal" id="note-title">
+              STILL FIGURING IT OUT. THAT’S THE POINT.
+            </h2>
+            <div class="note-statement-text reveal">
+              <p>
+                I’m interested in the moment an idea becomes <em>something you can use.</em>
+              </p>
+              <p>
+                Not just the interface. The question behind it, the structure underneath it, and the small decisions that make it feel clear.
+              </p>
+              <p>
+                This portfolio is a living index of that practice — actual repositories, documented status, and work that is honest about what is finished and what is still becoming.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="milestones section-pad" id="proof" aria-labelledby="milestones-title">
-        <div class="section-rail reveal reveal--fade"><span>05 — Milestones</span><span>A compact record</span></div>
-        <div class="milestones-layout"><h2 class="section-title reveal reveal--rise" id="milestones-title">What the trajectory<br /><em>looks like now.</em></h2><div class="milestone-list"><div class="milestone"><span>Now</span><div><h3 data-scroll-reveal>Second-year CSE student</h3><p data-scroll-reveal>CSPIT, CHARUSAT · building foundations through coursework, projects, and collaboration.</p></div></div><div class="milestone"><span>Focus</span><div><h3 data-scroll-reveal>Frontend + software engineering</h3><p data-scroll-reveal>Interfaces with enough structure underneath them to be useful, testable, and understandable.</p></div></div><div class="milestone"><span>Explore</span><div><h3 data-scroll-reveal>Security learning in progress</h3><p data-scroll-reveal>CTFs, OSINT, networking, and digital-forensics curiosity — not a professional security service.</p></div></div></div></div>
+      <!-- 03 — Work (Selected Experiments) -->
+      <section class="portfolio-section work-section" id="work" aria-labelledby="work-title">
+        <div class="work-header-row reveal">
+          <span class="section-label" id="work-title">03 / WORKBENCH</span>
+          <span>SELECTED PROJECTS [05]</span>
+        </div>
+
+        <div class="projects-archive-list">
+          <!-- 01: Company Project — Revora -->
+          <div class="archive-project-card reveal" id="project-card-revora">
+            <div class="archive-card-split">
+              <div class="archive-card-left">
+                <div class="archive-card-head">
+                  <span class="archive-card-num">01 / COMPANY PROJECT · AI MEETING ASSISTANT</span>
+                  <h3 class="archive-card-title">Revora</h3>
+                  <p class="archive-card-summary">
+                    An AI-powered meeting assistant that turns conversations into transcripts, summaries, action items, and durable project context. Exploring a more thoughtful way to work with conversations.
+                  </p>
+                </div>
+                <div class="archive-card-details">
+                  <p class="project-card-detail"><strong>OBJECTIVE:</strong> Capture meeting information and carry decisions, open tasks, and relevant context forward across project conversations.</p>
+                  <p class="project-card-detail"><strong>IMPLEMENTATION:</strong> The product combines Google Meet bot capture, MeetingBaaS recording and transcript workflows, ElevenLabs transcription, and Gemini-generated meeting follow-ups.</p>
+                  <p class="project-card-detail"><strong>DIRECTION:</strong> Project-based organization keeps past decisions, action items, and meeting context available instead of isolating every conversation as a one-off record.</p>
+                  <p class="project-card-detail"><strong>RESULT:</strong> Public repository available; open-source AI meeting assistant workflows and integrations.</p>
+                  <p class="project-card-stack"><strong>STACK:</strong> MeetingBaaS · ElevenLabs · Gemini</p>
+                </div>
+                <div class="archive-card-actions">
+                  <a class="btn-brutalist btn-brutalist--outline" href="https://github.com/Erva-S/revora-ai" target="_blank" rel="noreferrer">View Repository</a>
+                  <button class="btn-brutalist btn-brutalist--lime" type="button" data-open-project="revora">Open brief</button>
+                </div>
+              </div>
+              <div class="archive-card-right">
+                <div class="archive-card-preview" data-open-project="revora" role="button" tabindex="0" aria-label="Open Revora project brief and view full dashboard">
+                  <div class="dashboard-window-frame">
+                    <div class="dashboard-window-bar">
+                      <div class="dashboard-window-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+                      <span class="dashboard-window-title">REVORA AI DASHBOARD // LIVE WORKSPACE</span>
+                    </div>
+                    <div class="dashboard-window-screen">
+                      <img src="/assets/previews/revora-dashboard.png" alt="Revora AI Meeting Assistant interface showing transcription, meeting summaries, and action items" loading="lazy" />
+                    </div>
+                  </div>
+                  <div class="archive-preview-caption">
+                    <span>AUTHENTIC DASHBOARD CAPTURE</span>
+                    <span>MEETINGBAAS · ELEVENLABS · GEMINI</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 02: Client Work — Shreedutta Clinic -->
+          <div class="archive-project-card reveal" id="project-card-clinic">
+            <div class="archive-card-split">
+              <div class="archive-card-left">
+                <div class="archive-card-head">
+                  <span class="archive-card-num">02 / CLIENT WORK · FULL-STACK PLATFORM · DEPLOYED</span>
+                  <h3 class="archive-card-title">Shreedutta Clinic</h3>
+                  <p class="archive-card-summary">
+                    A deployed MERN clinic platform for cardiology consultation, diagnostics, and appointment management. Built and deployed the responsive clinic website and its appointment-focused patient experience for a live client project.
+                  </p>
+                </div>
+                <div class="archive-card-details">
+                  <p class="project-card-detail"><strong>OBJECTIVE:</strong> Give the clinic a clear public presence while supporting appointment workflows and role-based dashboards for clinic operations.</p>
+                  <p class="project-card-detail"><strong>IMPLEMENTATION:</strong> Built and deployed the responsive clinic website and its appointment-focused patient experience for a live client project.</p>
+                  <p class="project-card-detail"><strong>DIRECTION:</strong> The interface leads with essential care information, direct appointment access, and a calm responsive layout that keeps the clinic easy to navigate.</p>
+                  <p class="project-card-detail"><strong>RESULT:</strong> Deployed clinic website with appointment management and role-based clinic dashboards.</p>
+                  <p class="project-card-stack"><strong>STACK:</strong> MongoDB · Express.js · React · Node.js · Tailwind CSS</p>
+                </div>
+                <div class="archive-card-actions">
+                  <a class="btn-brutalist btn-brutalist--outline" href="https://shreeduttaclinic.com/" target="_blank" rel="noreferrer">Open Live Link</a>
+                  <button class="btn-brutalist btn-brutalist--lime" type="button" data-open-project="shreedutta">Open brief</button>
+                </div>
+              </div>
+              <div class="archive-card-right">
+                <div class="archive-card-preview" data-open-project="shreedutta" role="button" tabindex="0" aria-label="Open Shreedutta Clinic project brief and view dashboard">
+                  <div class="dashboard-window-frame">
+                    <div class="dashboard-window-bar">
+                      <div class="dashboard-window-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+                      <span class="dashboard-window-title">SHREEDUTTA CLINIC // MERN PLATFORM</span>
+                    </div>
+                    <div class="dashboard-window-screen">
+                      <img src="/assets/previews/shreedutta-clinic.png" alt="Shreedutta Clinic website homepage and appointment management interface" loading="lazy" />
+                    </div>
+                  </div>
+                  <div class="archive-preview-caption">
+                    <span>VERIFIED DEPLOYED WEBSITE</span>
+                    <span>SHREEDUTTACLINIC.COM</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hackathon Projects Group -->
+          <div class="hackathon-group-header reveal">
+            <p class="archive-header">HACKATHON PROJECTS [03]</p>
+          </div>
+
+          <!-- 03: Hackathon Project — Adhira SIH Project -->
+          <div class="archive-project-card reveal" id="project-card-sih">
+            <div class="archive-card-split">
+              <div class="archive-card-left">
+                <div class="archive-card-head">
+                  <span class="archive-card-num">03 / HACKATHON PROJECT · SMART INDIA HACKATHON 2026</span>
+                  <h3 class="archive-card-title">Adhira — SIH Project</h3>
+                  <p class="archive-card-summary">
+                    A mobile scholarship platform that brings scheme discovery, guided applications, document readiness, tracking, and assistance into one student workflow.
+                  </p>
+                </div>
+                <div class="archive-card-details">
+                  <p class="project-card-detail"><strong>OBJECTIVE:</strong> Reduce fragmentation in scholarship applications for Scheduled Tribe students through a guided mobile experience.</p>
+                  <p class="project-card-detail"><strong>IMPLEMENTATION:</strong> The application brings together scholarship discovery, document management, application tracking, notifications, and the JAGO assistant.</p>
+                  <p class="project-card-detail"><strong>DIRECTION:</strong> A staged application flow and project-specific guidance keep complex scholarship requirements understandable on a mobile device.</p>
+                  <p class="project-card-detail"><strong>RESULT:</strong> No public repository or deployment is displayed for this private project.</p>
+                  <p class="project-card-stack"><strong>STACK:</strong> Flutter · Dart · Firebase · Gemini</p>
+                </div>
+                <div class="archive-card-actions">
+                  <button class="btn-brutalist btn-brutalist--lime" type="button" data-open-project="adhiraSih">Open brief</button>
+                </div>
+              </div>
+              <div class="archive-card-right">
+                <div class="archive-card-preview" data-open-project="adhiraSih" role="button" tabindex="0" aria-label="Open Adhira SIH project brief and view mobile interface">
+                  <div class="dashboard-window-frame">
+                    <div class="dashboard-window-bar">
+                      <div class="dashboard-window-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+                      <span class="dashboard-window-title">ADHIRA SIH // MINISTRY OF TRIBAL AFFAIRS</span>
+                    </div>
+                    <div class="dashboard-window-screen dashboard-window-screen--mobile">
+                      <div class="mobile-phone-frame">
+                        <div class="phone-speaker-notch" aria-hidden="true"></div>
+                        <div class="phone-screen-wrap">
+                          <img src="/assets/previews/adhira-sih.png" alt="Adhira SIH mobile application splash screen for the Ministry of Tribal Affairs scholarship platform" loading="lazy" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="archive-preview-caption">
+                    <span>MINISTRY OF TRIBAL AFFAIRS · SIH 2026</span>
+                    <span>AUTHENTIC MOBILE CAPTURE</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 04: Hackathon Project — Adhira Travel -->
+          <div class="archive-project-card reveal">
+            <div class="archive-card-split">
+              <div class="archive-card-left">
+                <div class="archive-card-head">
+                  <span class="archive-card-num">04 / HACKATHON PROJECT · SERPAPI HACKATHON</span>
+                  <h3 class="archive-card-title">Adhira — Travel Companion</h3>
+                  <p class="archive-card-summary">
+                    A travel companion that brings flights, stays, places, and destination discovery into one planning experience.
+                  </p>
+                </div>
+                <div class="archive-card-details">
+                  <p class="project-card-detail"><strong>OBJECTIVE:</strong> Help travelers move from destination research to a more focused, useful trip-discovery workflow.</p>
+                  <p class="project-card-detail"><strong>IMPLEMENTATION:</strong> The project connects travel search and discovery capabilities around flights, stays, places, and destination imagery.</p>
+                  <p class="project-card-detail"><strong>DIRECTION:</strong> Search-led discovery keeps the experience practical: useful travel options and destination context stay close to the planning decision.</p>
+                  <p class="project-card-detail"><strong>RESULT:</strong> No public repository or deployment is displayed for this private project.</p>
+                  <p class="project-card-stack"><strong>STACK:</strong> SerpApi · travel discovery</p>
+                </div>
+                <div class="archive-card-actions">
+                  <button class="btn-brutalist btn-brutalist--lime" type="button" data-open-project="adhiraTravel">Open brief</button>
+                </div>
+              </div>
+              <div class="archive-card-right">
+                <div class="archive-card-preview" data-open-project="adhiraTravel" role="button" tabindex="0" aria-label="Open Adhira Travel brief and view dashboard">
+                  <div class="dashboard-window-frame">
+                    <div class="dashboard-window-bar">
+                      <div class="dashboard-window-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+                      <span class="dashboard-window-title">ADHIRA TRAVEL // DESTINATION DISCOVERY</span>
+                    </div>
+                    <div class="dashboard-window-screen">
+                      <img src="/assets/previews/adhira-travel.png" alt="Adhira travel companion interface showing destination discovery and journey planning" loading="lazy" />
+                    </div>
+                  </div>
+                  <div class="archive-preview-caption">
+                    <span>FLIGHTS · STAYS · PLACES WORKSPACE</span>
+                    <span>AUTHENTIC CAPTURE</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 05: Hackathon Project — Aethera Travel Platform -->
+          <div class="archive-project-card reveal">
+            <div class="archive-card-split">
+              <div class="archive-card-left">
+                <div class="archive-card-head">
+                  <span class="archive-card-num">05 / HACKATHON PROJECT · ODOO HACKATHON</span>
+                  <h3 class="archive-card-title">Aethera — Travel Platform</h3>
+                  <p class="archive-card-summary">
+                    A travel platform that brings destination discovery, itinerary planning, and in-destination journey context into one workspace.
+                  </p>
+                </div>
+                <div class="archive-card-details">
+                  <p class="project-card-detail"><strong>OBJECTIVE:</strong> Bring travel planning and live journey support together without losing the calm, editorial feel of the experience.</p>
+                  <p class="project-card-detail"><strong>IMPLEMENTATION:</strong> The public project evidence documents the React, TypeScript, and Vite application architecture and its travel-workspace direction.</p>
+                  <p class="project-card-detail"><strong>DIRECTION:</strong> A planning and live-mode split, destination context, local persistence, and a staged planner flow keep the product focused on the journey.</p>
+                  <p class="project-card-detail"><strong>RESULT:</strong> Public repository available; no verified public deployment is claimed here.</p>
+                  <p class="project-card-stack"><strong>STACK:</strong> React 18 · TypeScript · Vite · Tailwind CSS</p>
+                </div>
+                <div class="archive-card-actions">
+                  <a class="btn-brutalist btn-brutalist--outline" href="https://github.com/Erva-S/odoo-LDCE" target="_blank" rel="noreferrer">View Repository</a>
+                  <button class="btn-brutalist btn-brutalist--lime" type="button" data-open-project="aethera">Open brief</button>
+                </div>
+              </div>
+              <div class="archive-card-right">
+                <div class="archive-card-preview" data-open-project="aethera" role="button" tabindex="0" aria-label="Open Aethera brief and view dashboard">
+                  <div class="dashboard-window-frame">
+                    <div class="dashboard-window-bar">
+                      <div class="dashboard-window-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+                      <span class="dashboard-window-title">AETHERA // JOURNEY WORKSPACE</span>
+                    </div>
+                    <div class="dashboard-window-screen">
+                      <img src="/assets/previews/aethera-supplied.png" alt="Aethera travel platform dashboard showing the current journey workspace" loading="lazy" />
+                    </div>
+                  </div>
+                  <div class="archive-preview-caption">
+                    <span>ODOO HACKATHON TRAVEL WORKSPACE</span>
+                    <span>AUTHENTIC CAPTURE</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <section class="work-with-me section-pad" id="work-with-me" aria-labelledby="work-with-me-title">
-        <div class="section-rail reveal reveal--fade"><span>06 — What I build</span><span>Areas of focus</span></div>
-        <div class="collab-heading">
-          <h2 class="section-title reveal reveal--rise" id="work-with-me-title">What I can <em>build for you.</em></h2>
-          <p data-scroll-reveal>I’m open to collaborating on thoughtful websites, clean interfaces, and focused web applications.</p>
+      <!-- 04 — About -->
+      <section class="portfolio-section about-section" id="about" aria-labelledby="about-title">
+        <div class="about-split-grid">
+          <div class="about-identity-col reveal">
+            <p class="section-label">04 / ABOUT</p>
+            <h2 class="section-heading-condensed" id="about-title">
+              HUMAN. NOT A FRAMEWORK.
+            </h2>
+            <div class="about-narrative-copy">
+              <p>
+                I’m a CSE student who learns by making things real: a product workspace, a systems experiment, a command-line tool, a workflow that turns a loose idea into something with edges.
+              </p>
+              <p>
+                My current direction sits between frontend engineering, freelance web development, and software craft. I’m not presenting a finished career story — I’m building a useful one.
+              </p>
+            </div>
+          </div>
+
+          <div class="about-context-col reveal">
+            <div class="context-block">
+              <p><span class="context-block-num">[01] EDUCATION /</span> CSE at CSPIT, CHARUSAT. Learning by studying, building, and getting things wrong.</p>
+            </div>
+            <div class="context-block">
+              <p><span class="context-block-num">[02] PRACTICE /</span> Web development and programming. I turn ideas into thoughtful websites and useful web applications.</p>
+            </div>
+            <div class="context-block">
+              <p><span class="context-block-num">[03] CURIOSITY /</span> A beginner in cybersecurity. Exploring CTFs, OSINT, and how systems work. Not an expert — still asking questions.</p>
+            </div>
+            <div class="context-block">
+              <p><span class="context-block-num">[04] BUILD INTERFACES /</span> Responsive frontend work with attention to hierarchy, state, and detail.</p>
+            </div>
+            <div class="context-block">
+              <p><span class="context-block-num">[05] CONNECT THE PIECES /</span> Applications, APIs, data, and technical experiments that go beyond the surface.</p>
+            </div>
+            <div class="context-block">
+              <p><span class="context-block-num">[06] KEEP INVESTIGATING /</span> Networking, CTFs, OSINT, and security concepts as developing interests.</p>
+            </div>
+          </div>
         </div>
-        <div class="services-list" aria-label="What I build">
-          <div class="service-item">
-            <span class="service-num">01</span>
-            <div class="service-info">
-              <h3 data-scroll-reveal>Website Development</h3>
-              <p data-scroll-reveal>Clean, responsive websites and landing pages built with attention to typography, structure, and detail.</p>
+      </section>
+
+      <!-- 05 — Proof -->
+      <section class="portfolio-section proof-section" id="proof" aria-labelledby="proof-title">
+        <div class="proof-header-block reveal">
+          <p class="section-label" id="proof-title">05 / PROOF — AN ARCHIVE OF SHOWING UP</p>
+          <h2 class="section-heading-condensed">WHAT THE TRAJECTORY LOOKS LIKE NOW.</h2>
+          <p class="proof-lead-copy">A compact record of showing up — real interfaces, competitive sprints, collegiate milestones, and cybersecurity learning in progress.</p>
+        </div>
+
+        <div class="proof-records-group">
+          <p class="proof-group-label reveal">COMPETITIVE SPRINT & HACKATHON RECORDS [03]</p>
+
+          <div class="proof-record-row reveal">
+            <span class="proof-record-label">001 / FINALIST</span>
+            <div class="proof-record-main">
+              <div class="proof-record-head">
+                <h3 class="proof-record-title">C-QUEST 2.0</h3>
+                <span class="proof-record-tag">CSPIT, CHARUSAT · Competitive Programming</span>
+              </div>
+              <p class="proof-record-desc">Finalist recognition in collegiate competitive programming and algorithmic problem-solving under timed contest conditions. Algorithmic problem-solving, data structure design, and speed under constraints.</p>
             </div>
           </div>
-          <div class="service-item">
-            <span class="service-num">02</span>
-            <div class="service-info">
-              <h3 data-scroll-reveal>Frontend Development</h3>
-              <p data-scroll-reveal>Modern user interfaces, component design, and interactions built with clean HTML, CSS, and React.</p>
+
+          <div class="proof-record-row reveal">
+            <span class="proof-record-label">002 / TECHATHON PROJECT</span>
+            <div class="proof-record-main">
+              <div class="proof-record-head">
+                <h3 class="proof-record-title">Smart Web-Based Biometric Attendance Management System</h3>
+                <span class="proof-record-tag">Techathon Sprint · Hardware & Web Integration</span>
+              </div>
+              <p class="proof-record-desc">Hardware-integrated biometric attendance logging and automated verification web system developed under techathon sprint constraints. Full-stack dashboard with real-time biometric ingestion, student attendance verification records, and automated reporting.</p>
             </div>
           </div>
-          <div class="service-item">
-            <span class="service-num">03</span>
-            <div class="service-info">
-              <h3 data-scroll-reveal>Web Applications</h3>
-              <p data-scroll-reveal>Small-scale web applications, prototypes, and functional tools tailored to solve specific problems.</p>
+
+          <div class="proof-record-row reveal">
+            <span class="proof-record-label">003 / PARTICIPATION</span>
+            <div class="proof-record-main">
+              <div class="proof-record-head">
+                <h3 class="proof-record-title">CogniganzeX / Capture the Flag</h3>
+                <span class="proof-record-tag">Cybersecurity CTF Competition · Security in Progress</span>
+              </div>
+              <p class="proof-record-desc">Practical hands-on CTF challenge participation exploring web application security, digital forensics, packet analysis, cryptography, and network inspection — exploring how systems operate and break from the inside out.</p>
             </div>
           </div>
         </div>
-        <div class="services-action reveal reveal--fade">
-          <a class="button button--dark" href="#contact">
-            <span>Let’s talk about your idea</span>
+
+        <div class="proof-records-group proof-records-group--milestones">
+          <p class="proof-group-label reveal">ACADEMIC & SYSTEMS TRAJECTORY [03]</p>
+
+          <div class="proof-record-row reveal">
+            <span class="proof-record-label">004 / NOW</span>
+            <div class="proof-record-main">
+              <div class="proof-record-head">
+                <h3 class="proof-record-title">Second-year CSE student</h3>
+                <span class="proof-record-tag">CSPIT, CHARUSAT</span>
+              </div>
+              <p class="proof-record-desc">CSPIT, CHARUSAT · building foundations through coursework, projects, and collaboration. Studying core computing, data structures, software engineering, and continuous hands-on experimentation.</p>
+            </div>
+          </div>
+
+          <div class="proof-record-row reveal">
+            <span class="proof-record-label">005 / FOCUS</span>
+            <div class="proof-record-main">
+              <div class="proof-record-head">
+                <h3 class="proof-record-title">Frontend + software engineering</h3>
+                <span class="proof-record-tag">Interface Architecture & Systems</span>
+              </div>
+              <p class="proof-record-desc">Interfaces with enough structure underneath them to be useful, testable, and understandable. Turning interface ideas into accessible, responsive experiences with real structure underneath.</p>
+            </div>
+          </div>
+
+          <div class="proof-record-row reveal">
+            <span class="proof-record-label">006 / EXPLORE</span>
+            <div class="proof-record-main">
+              <div class="proof-record-head">
+                <h3 class="proof-record-title">Security learning in progress</h3>
+                <span class="proof-record-tag">Curiosity & Exploration</span>
+              </div>
+              <p class="proof-record-desc">CTFs, OSINT, networking, and digital-forensics curiosity — not a professional security service.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 06 — Build (Current Operating System) -->
+      <section class="portfolio-section build-section" id="build" aria-labelledby="build-heading">
+        <span id="work-with-me" class="section-anchor" aria-hidden="true"></span>
+        <p class="section-label reveal" id="build-title">06 / BUILD — CURRENT OPERATING SYSTEM</p>
+
+        <div class="build-heading-grid reveal">
+          <h2 class="section-heading-condensed" id="build-heading">
+            WHAT I CAN BUILD FOR YOU.
+          </h2>
+          <p class="build-lead-text">
+            I’m open to collaborating on thoughtful websites, clean interfaces, and focused web applications.
+          </p>
+        </div>
+
+        <div class="build-services-list" aria-label="What I can build">
+          <!-- Service 01 -->
+          <div class="build-service-row reveal">
+            <span class="build-service-num">01</span>
+            <div class="build-service-body">
+              <h3 class="build-service-title">WEBSITE DEVELOPMENT</h3>
+              <p class="build-service-desc">
+                Clean, responsive websites and landing pages built with attention to typography, structure, and detail.
+              </p>
+            </div>
+            <span class="build-service-tag">[ SITES / LANDING ]</span>
+          </div>
+
+          <!-- Service 02 -->
+          <div class="build-service-row reveal">
+            <span class="build-service-num">02</span>
+            <div class="build-service-body">
+              <h3 class="build-service-title">FRONTEND DEVELOPMENT</h3>
+              <p class="build-service-desc">
+                Modern user interfaces, component design, and interactions built with clean HTML, CSS, and React.
+              </p>
+            </div>
+            <span class="build-service-tag">[ UI / REACT ]</span>
+          </div>
+
+          <!-- Service 03 -->
+          <div class="build-service-row reveal">
+            <span class="build-service-num">03</span>
+            <div class="build-service-body">
+              <h3 class="build-service-title">WEB APPLICATIONS</h3>
+              <p class="build-service-desc">
+                Small-scale web applications, prototypes, and functional tools tailored to solve specific problems.
+              </p>
+            </div>
+            <span class="build-service-tag">[ APPS / PROTOTYPES ]</span>
+          </div>
+        </div>
+
+        <div class="build-actions-row reveal">
+          <a class="btn-brutalist btn-brutalist--lime" href="#connect">
+            Let’s talk about your idea
           </a>
         </div>
       </section>
 
-      <section class="contact section-pad" id="contact" aria-labelledby="contact-title">
-        <div class="section-rail section-rail--light reveal reveal--fade"><span>07 — Contact</span><span>Say hello</span></div>
-        <div class="contact-layout">
-          <div>
-            <h2 class="contact-title reveal reveal--rise" id="contact-title">Have an idea? <em>Let’s talk.</em></h2>
-            <p class="contact-copy" data-scroll-reveal>If you're looking for a website or have an idea you'd like to explore, I'd love to hear about it.</p>
-          </div>
-          <div class="contact-actions reveal reveal--rise">
-            <div class="contact-buttons-group">
-              <a class="button button--light" href="mailto:erva.savaliya.20@gmail.com" title="Email erva.savaliya.20@gmail.com">
-                <span class="button-content">
-                  <svg class="button-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-                  </svg>
-                  <span>erva.savaliya.20@gmail.com</span>
-                </span>
-              </a>
-              <a class="button button--outline" href="https://www.linkedin.com/in/erva-savaliya-4b945a378/" target="_blank" rel="noreferrer" title="Connect on LinkedIn">
-                <span class="button-content">
-                  <svg class="button-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-                    <rect width="4" height="12" x="2" y="9"></rect>
-                    <circle cx="4" cy="4" r="2"></circle>
-                  </svg>
-                  <span>Connect on LinkedIn</span>
-                </span>
-              </a>
-            </div>
-            <p><span class="contact-dot" aria-hidden="true"></span>Direct email or LinkedIn for inquiries. You can also send a message using the form below.</p>
-          </div>
+      <!-- 07 — Connect -->
+      <section class="portfolio-section connect-section" id="connect" aria-labelledby="connect-title">
+        <p class="section-label reveal">07 / CONNECT</p>
+        <h2 class="connect-heading reveal" id="connect-title">
+          GOT SOMETHING WORTH BUILDING?
+        </h2>
+        <p class="connect-lead-copy reveal">
+          I’m open to freelance projects, collaborations, and interesting ideas. If you're looking for a website or have an idea you'd like to explore, I'd love to hear about it.
+        </p>
+
+        <p class="connect-channels-label reveal">CONTACT CHANNELS / DIRECT LINKS</p>
+        <div class="connect-channels-row reveal">
+          <a class="channel-btn" href="mailto:erva.savaliya.20@gmail.com" title="Email erva.savaliya.20@gmail.com">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+            </svg>
+            <span>erva.savaliya.20@gmail.com</span>
+          </a>
+          <a class="channel-btn" href="https://www.linkedin.com/in/erva-savaliya-4b945a378/" target="_blank" rel="noreferrer" title="Connect on LinkedIn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+              <rect width="4" height="12" x="2" y="9"></rect>
+              <circle cx="4" cy="4" r="2"></circle>
+            </svg>
+            <span>LinkedIn</span>
+          </a>
+          <a class="channel-btn" href="https://github.com/Erva-S" target="_blank" rel="noreferrer" title="View GitHub profile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path>
+              <path d="M9 18c-4.51 2-5-2-7-2"></path>
+            </svg>
+            <span>GitHub</span>
+          </a>
         </div>
 
-        <div class="contact-card reveal reveal--stage">
+        <!-- Forminit Form Card -->
+        <div class="connect-form-wrap reveal">
+          <h3>SEND A DIRECT INQUIRY</h3>
           <form id="inquiry-form" class="simple-contact-form" action="https://forminit.com/f/jn7g4p33910" method="POST" enctype="multipart/form-data" novalidate>
-            <div class="form-grid form-grid--two">
-              <label class="form-field">
+            <div class="form-grid-two">
+              <label class="form-field-label">
                 <span>Name <b>*</b></span>
-                <input type="text" name="fi-sender-fullName" autocomplete="name" required placeholder="Your name" />
+                <input class="form-field-input" type="text" name="fi-sender-fullName" autocomplete="name" required placeholder="Your name" />
               </label>
-              <label class="form-field">
+              <label class="form-field-label">
                 <span>Email <b>*</b></span>
-                <input type="email" name="fi-sender-email" autocomplete="email" required placeholder="you@example.com" />
+                <input class="form-field-input" type="email" name="fi-sender-email" autocomplete="email" required placeholder="you@example.com" />
               </label>
             </div>
-            <label class="form-field form-field--message">
+            <label class="form-field-label">
               <span>Message <b>*</b></span>
-              <textarea name="fi-text-message" rows="2" required placeholder="Tell me a bit about what you're thinking or looking to build..."></textarea>
+              <textarea class="form-field-textarea" name="fi-text-message" rows="3" required placeholder="Tell me a bit about what you're thinking or looking to build..."></textarea>
             </label>
             <input type="hidden" name="fi-text-project_reference" id="inquiry-project" />
             <label class="honeypot" aria-hidden="true">Leave this field empty<input type="text" name="_gotcha" tabindex="-1" autocomplete="off" /></label>
             <div class="form-submit-row">
-              <button class="button button--light" type="submit">
+              <button class="btn-brutalist btn-brutalist--lime" type="submit">
                 <span class="submit-label">Send a message</span>
               </button>
               <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
             </div>
           </form>
         </div>
+
+        <p class="connect-signoff-tag reveal">ERVA SAVALIYA / ALWAYS A WORK IN PROGRESS</p>
       </section>
     </main>
 
-    <footer class="site-footer"><div class="footer-top"><a class="wordmark wordmark--footer" href="#top"><span class="wordmark-mark" aria-hidden="true">ES</span><span class="wordmark-name">Erva Savaliya</span></a><a class="back-to-top" href="#top">Back to top</a></div><div class="footer-bottom"><span>© 2026 Erva Savaliya</span><div><a href="#workbench">Workbench</a><a href="#about">About</a><a href="#contact">Connect</a><a href="https://www.linkedin.com/in/erva-savaliya-4b945a378/" target="_blank" rel="noreferrer">LinkedIn</a><a href="https://github.com/Erva-S" target="_blank" rel="noreferrer">GitHub</a></div><span>Built on caffeine &amp; the audacity to dream bigger.</span></div></footer>
+    <!-- Footer -->
+    <footer class="site-shell">
+      <div class="site-footer">
+        <span>© 2026 Erva Savaliya</span>
+        <div class="footer-nav-links">
+          <a href="#note">Note</a>
+          <a href="#work">Work</a>
+          <a href="#about">About</a>
+          <a href="#proof">Proof</a>
+          <a href="#build">Build</a>
+          <a href="#connect">Connect</a>
+        </div>
+        <button class="back-to-top-btn" id="back-to-top" type="button">Back to top ↑</button>
+      </div>
+    </footer>
 
+    <!-- Project Details Dialog Modal -->
     <dialog class="project-dialog" id="project-dialog" aria-labelledby="detail-title">
-      <div class="dialog-inner"><div class="dialog-top"><span>Project brief / <span id="detail-number">01</span></span><button class="dialog-close" type="button" aria-label="Close project details"><span class="dialog-close-label">Close</span><span class="dialog-close-icon" aria-hidden="true"></span></button></div><div class="dialog-body"><div class="dialog-art" id="detail-art" aria-hidden="true"></div><div class="dialog-copy"><h2 id="detail-title">Shreedutta Clinic</h2><p class="dialog-summary" id="detail-summary"></p><div class="detail-grid"><div><span>Objective</span><p id="detail-objective"></p></div><div><span>My implementation</span><p id="detail-contribution"></p></div><div><span>Technical direction</span><p id="detail-decisions"></p></div><div><span>Result</span><p id="detail-result"></p></div></div><div class="dialog-actions" id="detail-actions"></div></div></div><div class="dialog-nav"><button type="button" class="dialog-project-nav" data-project-prev>Previous</button><button type="button" class="dialog-project-nav" data-project-next>Next</button></div></div>
+      <div class="dialog-inner">
+        <div class="dialog-top">
+          <span>Project brief / <span id="detail-number">01</span></span>
+          <button class="dialog-close" type="button" aria-label="Close project details">
+            <span>Close</span>
+          </button>
+        </div>
+        <div class="dialog-body">
+          <div class="dialog-art" id="detail-art" aria-hidden="true"></div>
+          <div class="dialog-copy">
+            <h2 id="detail-title">Shreedutta Clinic</h2>
+            <p class="dialog-summary" id="detail-summary"></p>
+            <div class="detail-grid">
+              <div>
+                <span>Objective</span>
+                <p id="detail-objective"></p>
+              </div>
+              <div>
+                <span>My implementation</span>
+                <p id="detail-contribution"></p>
+              </div>
+              <div>
+                <span>Technical direction</span>
+                <p id="detail-decisions"></p>
+              </div>
+              <div>
+                <span>Result</span>
+                <p id="detail-result"></p>
+              </div>
+            </div>
+            <div class="dialog-actions" id="detail-actions"></div>
+          </div>
+        </div>
+        <div class="dialog-nav">
+          <button type="button" class="dialog-project-nav" data-project-prev>Previous</button>
+          <button type="button" class="dialog-project-nav" data-project-next>Next</button>
+        </div>
+      </div>
     </dialog>
 
     <script type="module" src="script.js"></script>
